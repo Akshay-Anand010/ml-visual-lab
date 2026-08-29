@@ -35,7 +35,7 @@ export function mountLinreg(root) {
         <button class="ghost" id="reset">Resample</button>
       </div>
       <p class="explain" id="status"></p>
-      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Linear%20Regression/linear_classifier_study_notes.pdf" target="_blank" rel="noreferrer">Course notes →</a></p>
+      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Linear%20Regression/linear_classifier_study_notes.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
 

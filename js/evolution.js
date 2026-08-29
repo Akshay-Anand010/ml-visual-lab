@@ -4,7 +4,7 @@ export function renderEvolution(root) {
       <div class="kicker">Evolution map</div>
       <h1>From fitting a line to asking every token who matters.</h1>
       <p class="lede">
-        A compressed history that matches how your IIIT-H modules unfold: classical predictors,
+        A compressed history of machine learning ideas: classical predictors,
         then layered networks, then models that specialize in space, time, and language.
       </p>
     </section>
@@ -19,11 +19,11 @@ export function renderEvolution(root) {
             </linearGradient>
           </defs>
           <line x1="60" y1="210" x2="900" y2="210" stroke="url(#g)" stroke-width="3" />
-          ${node(80, 210, "Linear &\nlogistic", "#/linreg", "1950s–90s · U1")}
+          ${node(80, 210, "Linear &\nlogistic", "#/linreg", "fit from data")}
           ${node(260, 120, "Trees &\nensembles", "#/tree", "splits · bagging")}
           ${node(260, 300, "PCA &\nfeatures", "#/pca", "compress data")}
-          ${node(460, 210, "Neural nets\n+ backprop", "#/backprop", "U2 · learn features")}
-          ${node(640, 120, "CNNs", "#/cnn", "vision · U3")}
+          ${node(460, 210, "Neural nets\n+ backprop", "#/backprop", "learn features")}
+          ${node(640, 120, "CNNs", "#/cnn", "vision")}
           ${node(640, 300, "RNNs", "#/rnn", "sequences")}
           ${node(820, 210, "Attention &\ntransformers", "#/attention", "today")}
           <path d="M140 210 C190 210 210 120 230 120" fill="none" stroke="rgba(240,236,228,0.25)" />
@@ -45,12 +45,12 @@ export function renderEvolution(root) {
         <div class="card static">
           <div class="tag">Leap A</div>
           <h2>Closed form → learning</h2>
-          <p>Regression and logistic replace hand formulas with parameters fit from data (your linear / logistic notes).</p>
+          <p>Regression and logistic replace hand formulas with parameters fit from data.</p>
         </div>
         <div class="card static">
           <div class="tag">Leap B</div>
           <h2>Regions without a line</h2>
-          <p>Trees and kernels carve weird shapes; ensembles reduce variance (decision tree + SVM notes).</p>
+          <p>Trees and kernels carve weird shapes; ensembles reduce variance.</p>
         </div>
         <div class="card static">
           <div class="tag">Leap C</div>

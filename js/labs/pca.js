@@ -69,7 +69,7 @@ export function mountPca(root) {
         <button id="resample">Resample cloud</button>
       </div>
       <p class="explain" id="status"></p>
-      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/PCA/beautified_pca_notes.pdf" target="_blank" rel="noreferrer">Course notes →</a></p>
+      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/PCA/beautified_pca_notes.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
 

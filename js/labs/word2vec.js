@@ -44,7 +44,7 @@ export function mountWord2Vec(root) {
         <button class="ghost" id="reset">Reshuffle</button>
       </div>
       <p class="explain" id="pair"></p>
-      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Bag%20of%20Words/Representation_of_Words_Clear_Notes.pdf" target="_blank" rel="noreferrer">Word representation notes →</a></p>
+      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Bag%20of%20Words/Representation_of_Words_Clear_Notes.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
 

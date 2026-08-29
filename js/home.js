@@ -9,17 +9,16 @@ function card(href, n, title, body) {
 export function renderHome(root) {
   root.innerHTML = `
     <section class="hero">
-      <div class="kicker">Interactive observatory · IIIT-H AIML track</div>
+      <div class="kicker">Interactive observatory</div>
       <h1>Watch machine learning happen, not just the equations.</h1>
       <p class="lede">
-        Chapters follow the path in your
-        <a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026" target="_blank" rel="noreferrer">AIML-IIITH-2026</a>
-        course: classical algorithms first, then neural nets, then language &amp; attention.
-        Every lab is a small working model you can tune — epochs, learning rate, depth, noise.
+        Chapters move from classical algorithms to neural nets to language and attention.
+        Every lab is a small working model you can tune — epochs, learning rate, depth, noise —
+        so the picture stays next to the math.
       </p>
       <div class="hero-actions">
         <a class="btn-link solid" href="#/evolution">See the evolution map</a>
-        <a class="btn-link" href="#/notes">Course PDF notes</a>
+        <a class="btn-link" href="#/notes">Reference notes</a>
         <a class="btn-link ghost" href="#/linreg">Start with linear regression</a>
       </div>
     </section>
@@ -48,7 +47,7 @@ export function renderHome(root) {
     <section class="chapter-block">
       <div class="kicker">Chapter 1</div>
       <h2 class="chapter-title">Classical machine learning</h2>
-      <p class="chapter-lede">The workhorses from your U1 notes — still the right first tools for many problems.</p>
+      <p class="chapter-lede">Core predictors that still solve many real problems well.</p>
       <div class="grid tight">
         ${card("#/linreg", "1.1", "Linear regression", "Gradient descent fits ŷ = wx + b. Tune epochs, η, noise.")}
         ${card("#/logreg", "1.2", "Logistic regression", "Soft decision boundary for two classes. Watch accuracy climb.")}
@@ -60,7 +59,7 @@ export function renderHome(root) {
     <section class="chapter-block">
       <div class="kicker">Chapter 2</div>
       <h2 class="chapter-title">Neural networks &amp; deep learning</h2>
-      <p class="chapter-lede">From a handful of neurons to convolution and recurrence — U2 / U3 territory.</p>
+      <p class="chapter-lede">From a handful of neurons to convolution and recurrence.</p>
       <div class="grid tight">
         ${card("#/neural", "2.1", "Neural network", "Change width and activation; watch pulses forward.")}
         ${card("#/backprop", "2.2", "Backpropagation", "XOR trainer with epoch budget, hidden size, learning rate.")}
@@ -84,11 +83,11 @@ export function renderHome(root) {
       <div class="chapter-head">
         <div>
           <div class="kicker">Reference</div>
-          <h2 class="chapter-title">Course notes from AIML-IIITH-2026</h2>
+          <h2 class="chapter-title">Notes &amp; reading</h2>
         </div>
-        <a class="btn-link" href="#/notes">Browse all PDFs →</a>
+        <a class="btn-link" href="#/notes">Browse PDFs →</a>
       </div>
-      <p class="chapter-lede">Study PDFs stay in your course repo; this lab links out so you can flip between picture and notes.</p>
+      <p class="chapter-lede">Linked study notes and slides — open a PDF, or jump into the matching lab when one exists.</p>
     </section>
   `;
   return () => {

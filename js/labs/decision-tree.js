@@ -80,7 +80,7 @@ export function mountDecisionTree(root) {
   const { canvas } = labShell(root, {
     title: "Decision tree",
     kicker: "Chapter 1 · Classical ML",
-    body: "Axis-aligned splits carve the plane into rectangles. Deeper trees fit training noise (overfitting). Compare shallow vs deep — the same trade-off you saw in generalization notes.",
+    body: "Axis-aligned splits carve the plane into rectangles. Deeper trees fit training noise (overfitting). Compare shallow vs deep and watch the bias–variance trade-off.",
     formula: "split = argmin Gini(left) + Gini(right)\nleaf → majority class",
     controlsHtml: `
       <label class="ctrl">Max depth <span id="dv" class="stat">2</span>
@@ -91,7 +91,7 @@ export function mountDecisionTree(root) {
         <button class="ghost" id="newdata">New data</button>
       </div>
       <p class="explain" id="status"></p>
-      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Decision%20Tree/Beautified_Decision_Tree_Algorithm.pdf" target="_blank" rel="noreferrer">Course notes →</a></p>
+      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Decision%20Tree/Beautified_Decision_Tree_Algorithm.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
 
