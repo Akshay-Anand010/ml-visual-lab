@@ -1,12 +1,14 @@
-import { labShell, setupCanvas, lerp } from "../ui.js";
+import { labShell, setupCanvas, lerp, setInspect } from "../ui.js";
+import { pathBannerHtml, bindPathBanner } from "../path.js";
 
 /** Tiny MLP trained on XOR with visible forward + backward passes. */
 export function mountBackprop(root) {
-  const { canvas } = labShell(root, {
+  const { canvas, inspect } = labShell(root, {
     title: "Backpropagation",
     kicker: "Chapter 2 · Deep learning",
-    body: "The network guesses XOR: 1 if the two bits differ. After the forward pass, the error (coral) walks backward. Set epochs, learning rate, and hidden width — then train a batch of epochs at once.",
+    body: "The network guesses XOR. Step one example, scrub the loss curve, hover an edge to inspect its weight. Coral pulses are error walking backward.",
     formula: "L = (ŷ − y)²\nW ← W − η · ∂L/∂W",
+    bannerHtml: pathBannerHtml("path-backprop"),
     controlsHtml: `
       <label class="ctrl">Learning rate η <span id="lrv" class="stat">0.25</span>
         <input id="lr" type="range" min="0.02" max="0.8" step="0.01" value="0.25" />
@@ -20,6 +22,9 @@ export function mountBackprop(root) {
       <label class="ctrl">Anim. speed <span id="spv" class="stat">1.0×</span>
         <input id="speed" type="range" min="0.4" max="2.5" step="0.1" value="1" />
       </label>
+      <label class="ctrl">Scrub loss history <span id="scrubv" class="stat">live</span>
+        <input id="scrub" type="range" min="0" max="0" step="1" value="0" disabled />
+      </label>
       <div class="btn-row">
         <button id="step">One example</button>
         <button id="runEpochs">Train epochs</button>
@@ -31,6 +36,7 @@ export function mountBackprop(root) {
     legend: `<span><i class="swatch" style="background:#6ee0c4"></i>forward</span>
              <span><i class="swatch" style="background:#ef7b6c"></i>backward error</span>`,
   });
+  bindPathBanner(root);
 
   const { ctx, resize, cssSize } = setupCanvas(canvas);
   const data = [
@@ -49,6 +55,8 @@ export function mountBackprop(root) {
   let t = 0;
   let last = { x: [0, 0], y: 0, yhat: 0, loss: 0 };
   const lossHist = [];
+  let scrubIdx = -1;
+  let edgeMeta = [];
 
   function initNet(h) {
     const rand = () => (Math.random() * 2 - 1) * 0.8;
@@ -101,6 +109,12 @@ export function mountBackprop(root) {
     last = { ...sample, yhat: cache.a2, loss, cache };
     lossHist.push(loss);
     if (lossHist.length > 120) lossHist.shift();
+    const scrub = root.querySelector("#scrub");
+    scrub.disabled = false;
+    scrub.max = String(lossHist.length - 1);
+    scrub.value = String(lossHist.length - 1);
+    scrubIdx = -1;
+    root.querySelector("#scrubv").textContent = "live";
     backward(cache, sample.y, lr);
     if (animate) {
       phase = "fwd";
@@ -131,8 +145,11 @@ export function mountBackprop(root) {
     const cache = last.cache || forward([0, 0]);
 
     const edges = [];
-    L.ins.forEach((a, i) => L.hid.forEach((b, j) => edges.push({ a, b, w: net.W1[j][i] })));
-    L.hid.forEach((a, i) => edges.push({ a, b: L.out[0], w: net.W2[0][i] }));
+    L.ins.forEach((a, i) =>
+      L.hid.forEach((b, j) => edges.push({ a, b, w: net.W1[j][i], name: `W1[${j},${i}]` }))
+    );
+    L.hid.forEach((a, i) => edges.push({ a, b: L.out[0], w: net.W2[0][i], name: `W2[0,${i}]` }));
+    edgeMeta = edges;
 
     edges.forEach((e) => {
       ctx.strokeStyle = e.w >= 0 ? "rgba(212,165,116,0.45)" : "rgba(239,123,108,0.45)";
@@ -185,13 +202,46 @@ export function mountBackprop(root) {
     ctx.strokeStyle = "#d4a574";
     ctx.beginPath();
     lossHist.forEach((v, i) => {
-      const x = bx + (i / 120) * 120;
+      const x = bx + (i / Math.max(1, lossHist.length - 1)) * 120;
       const y = by + 70 - Math.min(1, v) * 60;
       if (i === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     });
     ctx.stroke();
+    if (scrubIdx >= 0 && lossHist[scrubIdx] != null) {
+      const x = bx + (scrubIdx / Math.max(1, lossHist.length - 1)) * 120;
+      const y = by + 70 - Math.min(1, lossHist[scrubIdx]) * 60;
+      ctx.fillStyle = "#f0ece4";
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
+
+  canvas.addEventListener("mousemove", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    let best = null;
+    let bestD = 10;
+    edgeMeta.forEach((ed) => {
+      const dx = ed.b.x - ed.a.x;
+      const dy = ed.b.y - ed.a.y;
+      const len2 = dx * dx + dy * dy || 1;
+      let t = ((mx - ed.a.x) * dx + (my - ed.a.y) * dy) / len2;
+      t = Math.max(0, Math.min(1, t));
+      const px = ed.a.x + t * dx;
+      const py = ed.a.y + t * dy;
+      const d = Math.hypot(mx - px, my - py);
+      if (d < bestD) {
+        bestD = d;
+        best = ed;
+      }
+    });
+    if (best) setInspect(inspect, `${best.name} = <span class="stat">${best.w.toFixed(3)}</span>`);
+    else if (scrubIdx >= 0) setInspect(inspect, `History loss[${scrubIdx}] = ${lossHist[scrubIdx]?.toFixed(4)}`);
+    else setInspect(inspect, "");
+  });
 
   function tickPhase() {
     const spd = Number(root.querySelector("#speed").value);
@@ -216,6 +266,11 @@ export function mountBackprop(root) {
   };
   root.querySelector("#speed").oninput = (e) => {
     root.querySelector("#spv").textContent = `${Number(e.target.value).toFixed(1)}×`;
+  };
+  root.querySelector("#scrub").oninput = (e) => {
+    scrubIdx = Number(e.target.value);
+    root.querySelector("#scrubv").textContent = `t=${scrubIdx}`;
+    setInspect(inspect, `History loss[${scrubIdx}] = ${lossHist[scrubIdx]?.toFixed(4)}`);
   };
   root.querySelector("#hidden").oninput = (e) => {
     root.querySelector("#hv").textContent = e.target.value;

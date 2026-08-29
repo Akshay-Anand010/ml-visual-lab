@@ -1,13 +1,15 @@
-export function labShell(root, { title, kicker, body, formula, controlsHtml, legend }) {
+export function labShell(root, { title, kicker, body, formula, controlsHtml, legend, bannerHtml = "" }) {
   root.innerHTML = `
     <article class="lab">
       <aside class="panel">
         <div class="kicker">${kicker}</div>
         <h1>${title}</h1>
         <p>${body}</p>
+        ${bannerHtml}
         <pre class="formula">${formula}</pre>
         <div class="controls">${controlsHtml}</div>
         ${legend ? `<div class="legend">${legend}</div>` : ""}
+        <p class="inspect" id="inspect" hidden></p>
       </aside>
       <section class="panel stage">
         <canvas id="viz"></canvas>
@@ -17,7 +19,19 @@ export function labShell(root, { title, kicker, body, formula, controlsHtml, leg
   `;
   const canvas = root.querySelector("#viz");
   const extra = root.querySelector("#extra");
-  return { canvas, extra, root };
+  const inspect = root.querySelector("#inspect");
+  return { canvas, extra, root, inspect };
+}
+
+export function setInspect(el, html) {
+  if (!el) return;
+  if (!html) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  el.hidden = false;
+  el.innerHTML = html;
 }
 
 export function setupCanvas(canvas) {

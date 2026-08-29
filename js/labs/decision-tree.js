@@ -1,20 +1,6 @@
-import { labShell, setupCanvas } from "../ui.js";
-
-function makeData() {
-  const pts = [];
-  for (let i = 0; i < 60; i++) {
-    const x = Math.random() * 2 - 1;
-    const y = Math.random() * 2 - 1;
-    const label = x * 0.7 + y * 0.5 > 0.05 ? 1 : 0;
-    // sprinkle noise near boundary
-    pts.push({
-      x: x + (Math.random() - 0.5) * 0.15,
-      y: y + (Math.random() - 0.5) * 0.15,
-      label: Math.random() < 0.08 ? 1 - label : label,
-    });
-  }
-  return pts;
-}
+import { labShell, setupCanvas, setInspect } from "../ui.js";
+import { playgroundClassify } from "../data/playground.js";
+import { pathBannerHtml, bindPathBanner } from "../path.js";
 
 function gini(labels) {
   if (!labels.length) return 0;
@@ -25,7 +11,7 @@ function gini(labels) {
 function bestSplit(pts) {
   let best = null;
   ["x", "y"].forEach((axis) => {
-    const vals = [...new Set(pts.map((p) => p[axis]))].sort((a, b) => a - b);
+    const vals = [...new Set(pts.map((p) => +p[axis].toFixed(3)))].sort((a, b) => a - b);
     for (let i = 0; i < vals.length - 1; i++) {
       const thr = (vals[i] + vals[i + 1]) / 2;
       const left = pts.filter((p) => p[axis] <= thr);
@@ -77,34 +63,43 @@ function listSplits(node, bounds, out = []) {
 }
 
 export function mountDecisionTree(root) {
-  const { canvas } = labShell(root, {
+  const { canvas, inspect } = labShell(root, {
     title: "Decision tree",
     kicker: "Chapter 1 · Classical ML",
-    body: "Axis-aligned splits carve the plane into rectangles. Deeper trees fit training noise (overfitting). Compare shallow vs deep and watch the bias–variance trade-off.",
-    formula: "split = argmin Gini(left) + Gini(right)\nleaf → majority class",
+    body: "Same shared playground as logistic and k-NN. Axis-aligned splits carve rectangles. Raise depth until train accuracy looks perfect — that is the overfitting failure mode.",
+    formula: "split = argmin Gini(left)+Gini(right)\nleaf → majority class",
+    bannerHtml: pathBannerHtml("path-tree"),
     controlsHtml: `
       <label class="ctrl">Max depth <span id="dv" class="stat">2</span>
-        <input id="depth" type="range" min="1" max="6" step="1" value="2" />
+        <input id="depth" type="range" min="1" max="8" step="1" value="2" />
+      </label>
+      <label class="ctrl">Playground seed <span id="seedv" class="stat">42</span>
+        <input id="seed" type="range" min="1" max="99" step="1" value="42" />
+      </label>
+      <label class="ctrl fail">
+        <input id="overfit" type="checkbox" /> Show overfitting hint (depth ≥ 6)
       </label>
       <div class="btn-row">
         <button id="rebuild">Rebuild tree</button>
-        <button class="ghost" id="newdata">New data</button>
       </div>
       <p class="explain" id="status"></p>
       <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Decision%20Tree/Beautified_Decision_Tree_Algorithm.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
+  bindPathBanner(root);
 
   const { ctx, resize, cssSize } = setupCanvas(canvas);
-  let pts = makeData();
+  let pts = playgroundClassify(42);
   let tree = buildTree(pts, 0, 2);
 
   function rebuild() {
-    const d = Number(root.querySelector("#depth").value);
+    let d = Number(root.querySelector("#depth").value);
+    if (root.querySelector("#overfit").checked) d = Math.max(d, 6);
     tree = buildTree(pts, 0, d);
     const acc = pts.filter((p) => predict(tree, p) === p.label).length / pts.length;
+    const warn = d >= 6 ? " · <span class=\"stat\">overfit risk: jagged regions</span>" : "";
     root.querySelector("#status").innerHTML =
-      `depth ${d} · train accuracy <span class="stat">${(acc * 100).toFixed(0)}%</span> · deeper ≠ always better on new data`;
+      `depth ${d} · train acc <span class="stat">${(acc * 100).toFixed(0)}%</span> · shared playground${warn}`;
   }
 
   function draw() {
@@ -113,9 +108,7 @@ export function mountDecisionTree(root) {
     const pad = 36;
     const toX = (x) => pad + ((x + 1.2) / 2.4) * (W - pad * 2);
     const toY = (y) => H - pad - ((y + 1.2) / 2.4) * (H - pad * 2);
-
     const splits = listSplits(tree, { x0: -1.2, x1: 1.2, y0: -1.2, y1: 1.2 });
-    // paint regions coarsely
     const step = 10;
     for (let yy = pad; yy < H - pad; yy += step) {
       for (let xx = pad; xx < W - pad; xx += step) {
@@ -126,7 +119,6 @@ export function mountDecisionTree(root) {
         ctx.fillRect(xx, yy, step, step);
       }
     }
-
     ctx.strokeStyle = "#d4a574";
     ctx.lineWidth = 1.5;
     splits.forEach((s) => {
@@ -140,7 +132,6 @@ export function mountDecisionTree(root) {
       }
       ctx.stroke();
     });
-
     pts.forEach((p) => {
       ctx.fillStyle = p.label ? "#6ee0c4" : "#ef7b6c";
       ctx.beginPath();
@@ -149,15 +140,28 @@ export function mountDecisionTree(root) {
     });
   }
 
+  canvas.addEventListener("mousemove", (e) => {
+    const { w: W, h: H } = cssSize();
+    const pad = 36;
+    const rect = canvas.getBoundingClientRect();
+    const x = ((e.clientX - rect.left - pad) / (W - pad * 2)) * 2.4 - 1.2;
+    const y = ((H - pad - (e.clientY - rect.top)) / (H - pad * 2)) * 2.4 - 1.2;
+    setInspect(inspect, `Region label at pointer: ${predict(tree, { x, y })} · splits=${listSplits(tree, { x0: -1.2, x1: 1.2, y0: -1.2, y1: 1.2 }).length}`);
+  });
+
   root.querySelector("#depth").oninput = (e) => {
     root.querySelector("#dv").textContent = e.target.value;
     rebuild();
   };
-  root.querySelector("#rebuild").onclick = rebuild;
-  root.querySelector("#newdata").onclick = () => {
-    pts = makeData();
+  root.querySelector("#seed").oninput = (e) => {
+    root.querySelector("#seedv").textContent = e.target.value;
+  };
+  root.querySelector("#seed").onchange = () => {
+    pts = playgroundClassify(Number(root.querySelector("#seed").value));
     rebuild();
   };
+  root.querySelector("#overfit").onchange = rebuild;
+  root.querySelector("#rebuild").onclick = rebuild;
 
   rebuild();
   let raf;

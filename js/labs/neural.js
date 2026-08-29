@@ -1,11 +1,13 @@
-import { labShell, setupCanvas, lerp } from "../ui.js";
+import { labShell, setupCanvas, lerp, setInspect } from "../ui.js";
+import { pathBannerHtml, bindPathBanner } from "../path.js";
 
 export function mountNeural(root) {
-  const { canvas } = labShell(root, {
+  const { canvas, inspect } = labShell(root, {
     title: "Neural network",
     kicker: "Chapter 2 · Deep learning",
-    body: "Each neuron takes a weighted sum of the previous layer, then a non-linearity. Change hidden widths and activation — brighter neurons are more active.",
+    body: "Each neuron takes a weighted sum of the previous layer, then a non-linearity. Try the dead-ReLU failure mode: negative pre-activations stay zero forever.",
     formula: "a = f(Wx + b)\nf ∈ {ReLU, sigmoid, tanh}",
+    bannerHtml: pathBannerHtml("path-neural"),
     controlsHtml: `
       <label class="ctrl">Input x₁ <span id="x1v" class="stat">0.80</span>
         <input id="x1" type="range" min="0" max="1" step="0.01" value="0.8" />
@@ -26,6 +28,9 @@ export function mountNeural(root) {
           <option value="tanh">Tanh</option>
         </select>
       </label>
+      <label class="ctrl fail">
+        <input id="dead" type="checkbox" /> Failure mode: bias weights toward dead ReLUs
+      </label>
       <div class="btn-row">
         <button id="pulse">Send pulse</button>
         <button class="ghost" id="shuffle">Shuffle weights</button>
@@ -36,6 +41,7 @@ export function mountNeural(root) {
              <span><i class="swatch" style="background:#d4a574"></i>positive weight</span>
              <span><i class="swatch" style="background:#ef7b6c"></i>negative weight</span>`,
   });
+  bindPathBanner(root);
 
   const { ctx, resize, cssSize } = setupCanvas(canvas);
   let layers = [2, 5, 4, 1];
@@ -45,11 +51,17 @@ export function mountNeural(root) {
   let actName = "relu";
 
   function initWeights(ls) {
+    const dead = root.querySelector("#dead")?.checked;
     const out = [];
     for (let l = 0; l < ls.length - 1; l++) {
       const m = [];
       for (let j = 0; j < ls[l + 1]; j++) {
-        m.push(Array.from({ length: ls[l] }, () => (Math.random() * 2 - 1) * 1.2));
+        m.push(
+          Array.from({ length: ls[l] }, () => {
+            if (dead) return -Math.abs(Math.random() * 1.4) - 0.2;
+            return (Math.random() * 2 - 1) * 1.2;
+          })
+        );
       }
       out.push(m);
     }
@@ -160,7 +172,10 @@ export function mountNeural(root) {
     root.querySelector("#x1v").textContent = x[0].toFixed(2);
     root.querySelector("#x2v").textContent = x[1].toFixed(2);
     const y = forward(x);
-    outline.innerHTML = `Architecture [${layers.join(" → ")}] · output ≈ <span class="stat">${y.toFixed(3)}</span>`;
+    const deadN = acts.slice(1, -1).flat().filter((a) => a === 0).length;
+    const totalH = acts.slice(1, -1).flat().length;
+    outline.innerHTML = `Architecture [${layers.join(" → ")}] · output ≈ <span class="stat">${y.toFixed(3)}</span> · zeroed hidden ${deadN}/${totalH}`;
+    setInspect(inspect, actName === "relu" && deadN > 0 ? "Dead ReLUs stay at 0 for these inputs — no gradient flows through them in training." : "");
     if (sendPulse) spawnPulses();
   }
 
@@ -186,6 +201,12 @@ export function mountNeural(root) {
   };
   root.querySelector("#pulse").onclick = () => update(true);
   root.querySelector("#shuffle").onclick = () => {
+    W = initWeights(layers);
+    update(true);
+  };
+  root.querySelector("#dead").onchange = () => {
+    if (root.querySelector("#act").value !== "relu") root.querySelector("#act").value = "relu";
+    actName = "relu";
     W = initWeights(layers);
     update(true);
   };

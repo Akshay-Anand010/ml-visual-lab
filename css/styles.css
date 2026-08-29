@@ -558,3 +558,149 @@ a.ext {
 .site-foot a.ext {
   color: var(--brass);
 }
+
+.path-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.path-bar {
+  flex: 1;
+  max-width: 280px;
+  height: 8px;
+  border-radius: 999px;
+  background: #10141c;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.path-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--brass), var(--teal));
+}
+
+.path-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.path-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.path-card.done {
+  border-color: rgba(110, 224, 196, 0.35);
+}
+
+.path-num {
+  font-family: var(--mono);
+  color: var(--brass);
+  font-size: 1.1rem;
+  padding-top: 0.2rem;
+}
+
+.path-body h2 {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  margin: 0 0 0.35rem;
+}
+
+.path-body h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.path-body p {
+  margin: 0 0 0.45rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.path-check {
+  font-size: 0.9rem;
+}
+
+.path-banner {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin: 0.8rem 0;
+  padding: 0.7rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 165, 116, 0.35);
+  background: #12161f;
+}
+
+.path-banner.done {
+  border-color: rgba(110, 224, 196, 0.35);
+}
+
+.path-banner .path-check {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.inspect {
+  margin-top: 0.85rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  background: #10141c;
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--teal);
+  line-height: 1.4;
+}
+
+label.ctrl.fail {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+label.ctrl.fail input {
+  width: auto;
+  accent-color: var(--coral);
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.tag-row.tight {
+  margin-top: 0.4rem;
+}
+
+.chip-btn {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #10141c;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.chip-btn.on {
+  color: #0b0d10;
+  background: var(--teal);
+  border-color: transparent;
+}
