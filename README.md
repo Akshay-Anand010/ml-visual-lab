@@ -1,29 +1,22 @@
 # ML Visual Lab
 
-Interactive visual explanations of core machine learning ideas: neural networks, backpropagation, CNNs, RNNs, TF-IDF, Word2Vec, and attention.
+Interactive visual explanations of classical ML and deep learning, paired with course notes from [AIML-IIITH-2026](https://github.com/Akshay-Anand010/AIML-IIITH-2026).
 
 **Live site:** https://akshay-anand010.github.io/ml-visual-lab/
 
-## Local
+## Chapters
 
-Because the site uses ES modules, open it through a tiny static server (not `file://`):
+1. **Classical ML** — linear regression, logistic regression, PCA, decision trees  
+2. **Deep learning** — neural nets, backprop, CNN, RNN  
+3. **Language** — TF-IDF, Word2Vec, attention  
+4. **Evolution map** + **PDF notes** linked to the course repo  
+
+Labs expose knobs like epochs, learning rate, hidden width, depth, and noise.
+
+## Local
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then visit http://localhost:8080
-
-## Labs
-
-| Lab | What you see |
-| --- | --- |
-| Neural network | Activations pulse along weights as you change inputs |
-| Backpropagation | XOR trainer; error flows backward; loss curve |
-| CNN | A 3×3 kernel scans a tiny image; ReLU + max-pool |
-| RNN | One cell unrolled over “The cat sat on mat” |
-| TF-IDF | Edit three documents; heatmap of distinctive terms |
-| Word2Vec | Skip-gram pulls neighbors together in 2D |
-| Attention | Query–key heatmap; mix of values |
-
-The math is simplified so the picture stays honest, not a black box.
+Visit http://localhost:8080

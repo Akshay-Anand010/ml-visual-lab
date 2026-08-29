@@ -1,33 +1,97 @@
-export function renderHome(root) {
-  root.innerHTML = `
-    <section class="hero">
-      <div class="kicker">Interactive observatory</div>
-      <h1>Watch machine learning happen, not just the equations.</h1>
-      <p class="lede">
-        Each lab is a small working model: activations travel forward, errors travel back,
-        kernels slide, hidden states remember, and words pull their neighbors closer.
-        Drag sliders, step through time, and keep the picture next to the math.
-      </p>
-    </section>
-    <section class="grid">
-      ${card("#/neural", "01", "Neural network", "A layered graph of neurons. Push the inputs and watch activation flow to the output.")}
-      ${card("#/backprop", "02", "Backpropagation", "After a guess, error walks backward and every weight takes a tiny step downhill.")}
-      ${card("#/cnn", "03", "Convolutional net", "A 3×3 kernel slides across pixels. Edges light up; pooling shrinks the map.")}
-      ${card("#/rnn", "04", "Recurrent net", "The same cell reads a sequence. Hidden state is the memory that loops back.")}
-      ${card("#/tfidf", "05", "TF-IDF", "Rare words in a document get more weight. Edit the corpus and the heatmap updates.")}
-      ${card("#/word2vec", "06", "Word2Vec", "Skip-gram training: the center word pulls context closer and pushes random words away.")}
-      ${card("#/attention", "07", "Attention", "Queries look at keys. Bright cells are who a token listens to before mixing values.")}
-    </section>
-  `;
-  return () => {
-    root.innerHTML = "";
-  };
-}
-
 function card(href, n, title, body) {
   return `<a class="card" href="${href}">
     <div class="tag">${n}</div>
     <h2>${title}</h2>
     <p>${body}</p>
   </a>`;
+}
+
+export function renderHome(root) {
+  root.innerHTML = `
+    <section class="hero">
+      <div class="kicker">Interactive observatory · IIIT-H AIML track</div>
+      <h1>Watch machine learning happen, not just the equations.</h1>
+      <p class="lede">
+        Chapters follow the path in your
+        <a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026" target="_blank" rel="noreferrer">AIML-IIITH-2026</a>
+        course: classical algorithms first, then neural nets, then language &amp; attention.
+        Every lab is a small working model you can tune — epochs, learning rate, depth, noise.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-link solid" href="#/evolution">See the evolution map</a>
+        <a class="btn-link" href="#/notes">Course PDF notes</a>
+        <a class="btn-link ghost" href="#/linreg">Start with linear regression</a>
+      </div>
+    </section>
+
+    <section class="chapter-block">
+      <div class="chapter-head">
+        <div>
+          <div class="kicker">Roadmap</div>
+          <h2 class="chapter-title">How we got from lines to transformers</h2>
+        </div>
+        <a class="btn-link" href="#/evolution">Full figure →</a>
+      </div>
+      <div class="evo-strip" aria-hidden="true">
+        <div class="evo-node"><span>Linear models</span><small>fit a line / plane</small></div>
+        <div class="evo-arrow">→</div>
+        <div class="evo-node"><span>Trees &amp; kernels</span><small>non-linear regions</small></div>
+        <div class="evo-arrow">→</div>
+        <div class="evo-node"><span>Neural nets</span><small>learned features</small></div>
+        <div class="evo-arrow">→</div>
+        <div class="evo-node"><span>CNN / RNN</span><small>space &amp; time</small></div>
+        <div class="evo-arrow">→</div>
+        <div class="evo-node hot"><span>Attention</span><small>today’s stack</small></div>
+      </div>
+    </section>
+
+    <section class="chapter-block">
+      <div class="kicker">Chapter 1</div>
+      <h2 class="chapter-title">Classical machine learning</h2>
+      <p class="chapter-lede">The workhorses from your U1 notes — still the right first tools for many problems.</p>
+      <div class="grid tight">
+        ${card("#/linreg", "1.1", "Linear regression", "Gradient descent fits ŷ = wx + b. Tune epochs, η, noise.")}
+        ${card("#/logreg", "1.2", "Logistic regression", "Soft decision boundary for two classes. Watch accuracy climb.")}
+        ${card("#/pca", "1.3", "PCA", "Principal axes of a cloud — variance explained live.")}
+        ${card("#/tree", "1.4", "Decision tree", "Axis splits and depth vs overfitting.")}
+      </div>
+    </section>
+
+    <section class="chapter-block">
+      <div class="kicker">Chapter 2</div>
+      <h2 class="chapter-title">Neural networks &amp; deep learning</h2>
+      <p class="chapter-lede">From a handful of neurons to convolution and recurrence — U2 / U3 territory.</p>
+      <div class="grid tight">
+        ${card("#/neural", "2.1", "Neural network", "Change width and activation; watch pulses forward.")}
+        ${card("#/backprop", "2.2", "Backpropagation", "XOR trainer with epoch budget, hidden size, learning rate.")}
+        ${card("#/cnn", "2.3", "CNN", "Sliding kernels, ReLU, max-pool.")}
+        ${card("#/rnn", "2.4", "RNN", "Hidden state looping through a short sentence.")}
+      </div>
+    </section>
+
+    <section class="chapter-block">
+      <div class="kicker">Chapter 3</div>
+      <h2 class="chapter-title">Language &amp; attention</h2>
+      <p class="chapter-lede">From bag-of-words style weights to embeddings and who-listens-to-whom.</p>
+      <div class="grid tight">
+        ${card("#/tfidf", "3.1", "TF-IDF", "Edit documents; distinctive terms light up.")}
+        ${card("#/word2vec", "3.2", "Word2Vec", "Skip-gram pulls neighbors together in 2D.")}
+        ${card("#/attention", "3.3", "Attention", "Query–key heatmap before transformers.")}
+      </div>
+    </section>
+
+    <section class="chapter-block">
+      <div class="chapter-head">
+        <div>
+          <div class="kicker">Reference</div>
+          <h2 class="chapter-title">Course notes from AIML-IIITH-2026</h2>
+        </div>
+        <a class="btn-link" href="#/notes">Browse all PDFs →</a>
+      </div>
+      <p class="chapter-lede">Study PDFs stay in your course repo; this lab links out so you can flip between picture and notes.</p>
+    </section>
+  `;
+  return () => {
+    root.innerHTML = "";
+  };
 }

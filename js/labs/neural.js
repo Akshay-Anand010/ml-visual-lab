@@ -3,15 +3,28 @@ import { labShell, setupCanvas, lerp } from "../ui.js";
 export function mountNeural(root) {
   const { canvas } = labShell(root, {
     title: "Neural network",
-    kicker: "Forward pass",
-    body: "Each neuron takes a weighted sum of the previous layer, then applies ReLU. Drag the two inputs — they could be coordinates, pixels, or any features — and watch the signal travel right. Brighter neurons are more active.",
-    formula: "a = ReLU(Wx + b)\nReLU(z) = max(0, z)",
+    kicker: "Chapter 2 · Deep learning",
+    body: "Each neuron takes a weighted sum of the previous layer, then a non-linearity. Change hidden widths and activation — brighter neurons are more active.",
+    formula: "a = f(Wx + b)\nf ∈ {ReLU, sigmoid, tanh}",
     controlsHtml: `
       <label class="ctrl">Input x₁ <span id="x1v" class="stat">0.80</span>
         <input id="x1" type="range" min="0" max="1" step="0.01" value="0.8" />
       </label>
       <label class="ctrl">Input x₂ <span id="x2v" class="stat">0.20</span>
         <input id="x2" type="range" min="0" max="1" step="0.01" value="0.2" />
+      </label>
+      <label class="ctrl">Hidden layer 1 <span id="h1v" class="stat">5</span>
+        <input id="h1" type="range" min="2" max="8" step="1" value="5" />
+      </label>
+      <label class="ctrl">Hidden layer 2 <span id="h2v" class="stat">4</span>
+        <input id="h2" type="range" min="2" max="8" step="1" value="4" />
+      </label>
+      <label class="ctrl">Activation
+        <select id="act">
+          <option value="relu">ReLU</option>
+          <option value="sigmoid">Sigmoid</option>
+          <option value="tanh">Tanh</option>
+        </select>
       </label>
       <div class="btn-row">
         <button id="pulse">Send pulse</button>
@@ -25,10 +38,11 @@ export function mountNeural(root) {
   });
 
   const { ctx, resize, cssSize } = setupCanvas(canvas);
-  const layers = [2, 5, 4, 1];
+  let layers = [2, 5, 4, 1];
   let W = initWeights(layers);
   let pulses = [];
   let acts = layers.map((n) => Array(n).fill(0));
+  let actName = "relu";
 
   function initWeights(ls) {
     const out = [];
@@ -42,16 +56,24 @@ export function mountNeural(root) {
     return out;
   }
 
-  function relu(z) {
+  function act(z) {
+    if (actName === "sigmoid") return 1 / (1 + Math.exp(-z));
+    if (actName === "tanh") return Math.tanh(z);
     return Math.max(0, z);
   }
 
   function forward(x) {
     acts[0] = [...x];
     for (let l = 0; l < W.length; l++) {
-      acts[l + 1] = W[l].map((row) => relu(row.reduce((s, w, i) => s + w * acts[l][i], 0)));
+      acts[l + 1] = W[l].map((row) => act(row.reduce((s, w, i) => s + w * acts[l][i], 0)));
     }
     return acts[acts.length - 1][0];
+  }
+
+  function rebuild() {
+    layers = [2, Number(root.querySelector("#h1").value), Number(root.querySelector("#h2").value), 1];
+    W = initWeights(layers);
+    acts = layers.map((n) => Array(n).fill(0));
   }
 
   function positions() {
@@ -76,8 +98,7 @@ export function mountNeural(root) {
         for (let j = 0; j < layers[l + 1]; j++) {
           const a = pts.find((p) => p.li === l && p.i === i);
           const b = pts.find((p) => p.li === l + 1 && p.i === j);
-          const delay = l * 18 + i * 3;
-          pulses.push({ a, b, t: -delay, speed: 0.045, w: W[l][j][i] });
+          pulses.push({ a, b, t: -(l * 18 + i * 3), speed: 0.045, w: W[l][j][i] });
         }
       }
     }
@@ -87,7 +108,6 @@ export function mountNeural(root) {
     const { w, h } = cssSize();
     ctx.clearRect(0, 0, w, h);
     const pts = positions();
-    ctx.lineWidth = 1.2;
     W.forEach((mat, l) => {
       mat.forEach((row, j) => {
         row.forEach((wt, i) => {
@@ -116,10 +136,10 @@ export function mountNeural(root) {
 
     pts.forEach((p) => {
       const a = acts[p.li][p.i];
-      const r = 11 + a * 6;
+      const show = actName === "tanh" ? (a + 1) / 2 : Math.abs(a);
       ctx.beginPath();
-      ctx.fillStyle = `rgba(110,224,196,${0.15 + 0.7 * Math.min(1, a)})`;
-      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(110,224,196,${0.15 + 0.7 * Math.min(1, show)})`;
+      ctx.arc(p.x, p.y, 11 + Math.min(1, show) * 6, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = "#f0ece4";
       ctx.lineWidth = 1.4;
@@ -129,13 +149,6 @@ export function mountNeural(root) {
       ctx.textAlign = "center";
       ctx.fillText(a.toFixed(2), p.x, p.y + 26);
     });
-
-    ctx.textAlign = "left";
-    ctx.fillStyle = "#9a948a";
-    ctx.font = "12px Source Sans 3, sans-serif";
-    ctx.fillText("input", 36, 28);
-    ctx.fillText("hidden", w * 0.38, 28);
-    ctx.fillText("output", w - 90, 28);
   }
 
   const x1 = root.querySelector("#x1");
@@ -147,12 +160,30 @@ export function mountNeural(root) {
     root.querySelector("#x1v").textContent = x[0].toFixed(2);
     root.querySelector("#x2v").textContent = x[1].toFixed(2);
     const y = forward(x);
-    outline.innerHTML = `Output neuron ≈ <span class="stat">${y.toFixed(3)}</span>. If you imagine a classifier, values near 1 are “yes”, near 0 are “no”.`;
+    outline.innerHTML = `Architecture [${layers.join(" → ")}] · output ≈ <span class="stat">${y.toFixed(3)}</span>`;
     if (sendPulse) spawnPulses();
   }
 
   x1.oninput = () => update(true);
   x2.oninput = () => update(true);
+  root.querySelector("#h1").oninput = (e) => {
+    root.querySelector("#h1v").textContent = e.target.value;
+  };
+  root.querySelector("#h2").oninput = (e) => {
+    root.querySelector("#h2v").textContent = e.target.value;
+  };
+  root.querySelector("#h1").onchange = () => {
+    rebuild();
+    update(true);
+  };
+  root.querySelector("#h2").onchange = () => {
+    rebuild();
+    update(true);
+  };
+  root.querySelector("#act").onchange = (e) => {
+    actName = e.target.value;
+    update(true);
+  };
   root.querySelector("#pulse").onclick = () => update(true);
   root.querySelector("#shuffle").onclick = () => {
     W = initWeights(layers);

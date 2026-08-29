@@ -21,32 +21,44 @@ function skipPairs(seq, w) {
 export function mountWord2Vec(root) {
   const { canvas } = labShell(root, {
     title: "Word2Vec (skip-gram)",
-    kicker: "Words that live together",
-    body: "Skip-gram: given a center word, predict its neighbors. Training pulls the center embedding toward real context words and slightly away from random “negative” words. After a few hundred steps, similar words sit nearer in this 2D map.",
+    kicker: "Chapter 3 · Language",
+    body: "Skip-gram: given a center word, predict its neighbors. Tune learning rate, context window, and steps per frame — embeddings drift as pairs train.",
     formula: "center · context  ↑  for true pairs\ncenter · negative  ↓  for noise samples",
     controlsHtml: `
-      <label class="ctrl">Learning rate
+      <label class="ctrl">Learning rate <span id="lrv" class="stat">0.08</span>
         <input id="lr" type="range" min="0.02" max="0.25" step="0.01" value="0.08" />
+      </label>
+      <label class="ctrl">Context window <span id="wv" class="stat">2</span>
+        <input id="window" type="range" min="1" max="4" step="1" value="2" />
+      </label>
+      <label class="ctrl">Steps / frame <span id="sv" class="stat">4</span>
+        <input id="steps" type="range" min="1" max="20" step="1" value="4" />
+      </label>
+      <label class="ctrl">Train burst (steps) <span id="bv" class="stat">200</span>
+        <input id="burst" type="range" min="50" max="1000" step="50" value="200" />
       </label>
       <div class="btn-row">
         <button id="train">Train</button>
+        <button id="burstBtn">Run burst</button>
         <button class="ghost" id="pause">Pause</button>
         <button class="ghost" id="reset">Reshuffle</button>
       </div>
       <p class="explain" id="pair"></p>
+      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Bag%20of%20Words/Representation_of_Words_Clear_Notes.pdf" target="_blank" rel="noreferrer">Word representation notes →</a></p>
     `,
   });
 
   const { ctx, resize, cssSize } = setupCanvas(canvas);
   const seq = tokens(CORPUS);
   const vocab = [...new Set(seq)];
-  const pairs = skipPairs(seq, WINDOW);
+  let pairs = skipPairs(seq, WINDOW);
   let vec = Object.fromEntries(vocab.map((w) => [w, [Math.random() * 2 - 1, Math.random() * 2 - 1]]));
   let running = true;
   let steps = 0;
   let current = pairs[0];
 
   function trainStep(lr) {
+    if (!pairs.length) return;
     const pair = pairs[Math.floor(Math.random() * pairs.length)];
     current = pair;
     const [c, o] = pair;
@@ -116,11 +128,32 @@ export function mountWord2Vec(root) {
   }
 
   const pairEl = root.querySelector("#pair");
+  root.querySelector("#lr").oninput = (e) => {
+    root.querySelector("#lrv").textContent = Number(e.target.value).toFixed(2);
+  };
+  root.querySelector("#window").oninput = (e) => {
+    root.querySelector("#wv").textContent = e.target.value;
+  };
+  root.querySelector("#window").onchange = () => {
+    pairs = skipPairs(seq, Number(root.querySelector("#window").value));
+  };
+  root.querySelector("#steps").oninput = (e) => {
+    root.querySelector("#sv").textContent = e.target.value;
+  };
+  root.querySelector("#burst").oninput = (e) => {
+    root.querySelector("#bv").textContent = e.target.value;
+  };
   root.querySelector("#train").onclick = () => {
     running = true;
   };
   root.querySelector("#pause").onclick = () => {
     running = false;
+  };
+  root.querySelector("#burstBtn").onclick = () => {
+    const lr = Number(root.querySelector("#lr").value);
+    const n = Number(root.querySelector("#burst").value);
+    for (let i = 0; i < n; i++) trainStep(lr);
+    pairEl.innerHTML = `Burst done · steps <span class="stat">${steps}</span> · last <span class="stat">${current[0]} → ${current[1]}</span>`;
   };
   root.querySelector("#reset").onclick = () => {
     vec = Object.fromEntries(vocab.map((w) => [w, [Math.random() * 2 - 1, Math.random() * 2 - 1]]));
@@ -130,9 +163,10 @@ export function mountWord2Vec(root) {
   let raf;
   const loop = () => {
     const lr = Number(root.querySelector("#lr").value);
+    const per = Number(root.querySelector("#steps").value);
     if (running) {
-      for (let i = 0; i < 4; i++) trainStep(lr);
-      pairEl.innerHTML = `Skip-gram pair: <span class="stat">${current[0]} → ${current[1]}</span> (center predicts context)`;
+      for (let i = 0; i < per; i++) trainStep(lr);
+      pairEl.innerHTML = `Skip-gram pair: <span class="stat">${current[0]} → ${current[1]}</span> · steps <span class="stat">${steps}</span>`;
     }
     draw();
     raf = requestAnimationFrame(loop);
