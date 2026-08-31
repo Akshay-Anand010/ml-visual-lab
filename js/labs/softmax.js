@@ -14,6 +14,7 @@ export function mountSoftmax(root) {
     kicker: "Chapter 1 · Probabilities",
     body: "Logits are free scores. Softmax turns them into a probability distribution that always sums to 1 — the last layer of most classifiers. Temperature sharpens or flattens the distribution.",
     formula: "pᵢ = exp(zᵢ / T) / Σⱼ exp(zⱼ / T)",
+    guideKey: "softmax",
     bannerHtml: pathBannerHtml("path-softmax"),
     controlsHtml: `
       <label class="ctrl">z₀ (class A) <span id="z0v" class="stat">1.2</span>

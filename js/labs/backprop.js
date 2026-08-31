@@ -8,6 +8,8 @@ export function mountBackprop(root) {
     kicker: "Chapter 2 · Deep learning",
     body: "The network guesses XOR. Step one example, scrub the loss curve, hover an edge to inspect its weight. Coral pulses are error walking backward.",
     formula: "L = (ŷ − y)²\nW ← W − η · ∂L/∂W",
+    guideKey: "backprop",
+    notesHref: "#/notes?doc=reading-materials%2FU3%2F2026-07-25_CNN-Back-Propagation%2Flecture-notes%2FBack-Propagation__Back-Propagation.pdf",
     bannerHtml: pathBannerHtml("path-backprop"),
     controlsHtml: `
       <label class="ctrl">Learning rate η <span id="lrv" class="stat">0.25</span>

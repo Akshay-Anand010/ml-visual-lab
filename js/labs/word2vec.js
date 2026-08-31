@@ -24,6 +24,8 @@ export function mountWord2Vec(root) {
     kicker: "Chapter 3 · Language",
     body: "Skip-gram: given a center word, predict its neighbors. Tune learning rate, context window, and steps per frame — embeddings drift as pairs train.",
     formula: "center · context  ↑  for true pairs\ncenter · negative  ↓  for noise samples",
+    guideKey: "word2vec",
+    notesHref: "#/notes?doc=Bag%20of%20Words%2FRepresentation_of_Words_Clear_Notes.pdf",
     controlsHtml: `
       <label class="ctrl">Learning rate <span id="lrv" class="stat">0.08</span>
         <input id="lr" type="range" min="0.02" max="0.25" step="0.01" value="0.08" />
@@ -44,7 +46,6 @@ export function mountWord2Vec(root) {
         <button class="ghost" id="reset">Reshuffle</button>
       </div>
       <p class="explain" id="pair"></p>
-      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Bag%20of%20Words/Representation_of_Words_Clear_Notes.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
 

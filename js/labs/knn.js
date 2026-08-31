@@ -21,6 +21,7 @@ export function mountKnn(root) {
     kicker: "Chapter 1 · Classical ML",
     body: "Same shared playground as logistic regression and the tree — but no weights. A query point borrows the majority label of its k nearest neighbors. Small k = jagged; large k = smoother.",
     formula: "ŷ(x) = majority{ yᵢ : i ∈ kNN(x) }",
+    guideKey: "knn",
     bannerHtml: pathBannerHtml("path-knn"),
     controlsHtml: `
       <label class="ctrl">k <span id="kv" class="stat">3</span>

@@ -1,7 +1,10 @@
+import { initTheme } from "./theme.js";
 import { renderHome } from "./home.js";
 import { renderNotes } from "./notes.js";
 import { renderEvolution } from "./evolution.js";
 import { renderPath } from "./path.js";
+
+initTheme();
 import { mountNeural } from "./labs/neural.js";
 import { mountBackprop } from "./labs/backprop.js";
 import { mountCnn } from "./labs/cnn.js";

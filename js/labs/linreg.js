@@ -8,6 +8,8 @@ export function mountLinreg(root) {
     kicker: "Chapter 1 · Classical ML",
     body: "Fit a line ŷ = wx + b by gradient descent. Step one epoch at a time, or scrub the loss history after training.",
     formula: "L = ½ Σ (ŷᵢ − yᵢ)²\nw ← w − η · ∂L/∂w",
+    guideKey: "linreg",
+    notesHref: "#/notes?doc=Linear%20Regression%2Flinear_classifier_study_notes.pdf",
     bannerHtml: pathBannerHtml("path-linreg"),
     controlsHtml: `
       <label class="ctrl">Learning rate η <span id="lrv" class="stat">0.08</span>
@@ -32,7 +34,6 @@ export function mountLinreg(root) {
         <button class="ghost" id="reset">Resample</button>
       </div>
       <p class="explain" id="status"></p>
-      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Linear%20Regression/linear_classifier_study_notes.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
   bindPathBanner(root);

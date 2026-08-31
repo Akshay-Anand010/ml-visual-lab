@@ -46,6 +46,8 @@ export function mountTfidf(root) {
     kicker: "What makes a word distinctive",
     body: "Term frequency says how often a word appears in one document. Inverse document frequency down-weights words that appear everywhere (“the”, “and”). Their product highlights the words that characterize a document.",
     formula: "tf(t,d) = count(t,d) / |d|\nidf(t) = log((N+1)/(df(t)+1)) + 1\ntfidf = tf · idf",
+    guideKey: "tfidf",
+    notesHref: "#/notes?doc=Bag%20of%20Words%2FRepresentation_of_Words_Clear_Notes.pdf",
     controlsHtml: `
       <label class="ctrl">Document A
         <textarea id="d0">Neural networks learn weights from data using gradient descent.</textarea>

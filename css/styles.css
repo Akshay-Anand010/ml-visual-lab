@@ -1,4 +1,5 @@
-:root {
+:root,
+html[data-theme="dark"] {
   --bg: #0b0d10;
   --bg-2: #12151b;
   --ink: #f0ece4;
@@ -10,9 +11,33 @@
   --violet: #b9a6ff;
   --paper: #1a1e27;
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  --canvas-soft: #2a303c;
+  --field: #10141c;
+  --topbar-bg: rgba(11, 13, 16, 0.78);
+  --hero-glow-a: rgba(212, 165, 116, 0.08);
+  --hero-glow-b: rgba(110, 224, 196, 0.06);
   --sans: "Source Sans 3", system-ui, sans-serif;
   --serif: "Fraunces", Georgia, serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+html[data-theme="light"] {
+  --bg: #f4efe6;
+  --bg-2: #ebe4d8;
+  --ink: #1c1915;
+  --muted: #6b6358;
+  --line: rgba(28, 25, 21, 0.12);
+  --brass: #9a6b2f;
+  --teal: #0f7a66;
+  --coral: #c44b3c;
+  --violet: #5b4db0;
+  --paper: #fffaf2;
+  --shadow: 0 18px 50px rgba(70, 50, 20, 0.12);
+  --canvas-soft: #e7dfd2;
+  --field: #f0e9dc;
+  --topbar-bg: rgba(244, 239, 230, 0.88);
+  --hero-glow-a: rgba(154, 107, 47, 0.1);
+  --hero-glow-b: rgba(15, 122, 102, 0.08);
 }
 
 * {
@@ -30,8 +55,13 @@ body {
 
 body {
   background-image:
-    radial-gradient(1200px 600px at 10% -10%, rgba(212, 165, 116, 0.08), transparent 50%),
-    radial-gradient(900px 500px at 110% 0%, rgba(110, 224, 196, 0.06), transparent 45%);
+    radial-gradient(1200px 600px at 10% -10%, var(--hero-glow-a), transparent 50%),
+    radial-gradient(900px 500px at 110% 0%, var(--hero-glow-b), transparent 45%);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html[data-theme="light"] .grain {
+  opacity: 0.035;
 }
 
 .grain {
@@ -54,14 +84,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
   padding: 1.1rem 1.6rem;
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
-  background: rgba(11, 13, 16, 0.78);
+  background: var(--topbar-bg);
   z-index: 5;
+}
+
+.topbar .top-nav {
+  flex: 1 1 auto;
 }
 
 .mark {
@@ -219,10 +254,67 @@ body {
   font-family: var(--mono);
   font-size: 0.82rem;
   color: var(--teal);
-  background: #10141c;
+  background: var(--field);
   border-radius: 10px;
   padding: 0.7rem 0.8rem;
   overflow-x: auto;
+}
+
+.lab-more {
+  margin: 0.75rem 0 0.2rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--field);
+  padding: 0.55rem 0.75rem;
+}
+
+.lab-more summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--brass);
+  list-style: none;
+}
+
+.lab-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.lab-more summary::before {
+  content: "▸ ";
+}
+
+.lab-more[open] summary::before {
+  content: "▾ ";
+}
+
+.guide-simple {
+  margin: 0.55rem 0 0.35rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.guide-bullets {
+  margin: 0.2rem 0 0.6rem;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.guide-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.theme-toggle {
+  border: 1px solid var(--line);
+  background: var(--field);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 .controls {
@@ -256,7 +348,7 @@ textarea {
 }
 
 select {
-  background: #10141c;
+  background: var(--field);
   color: var(--ink);
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -324,7 +416,7 @@ canvas {
 textarea {
   width: 100%;
   min-height: 88px;
-  background: #10141c;
+  background: var(--field);
   color: var(--ink);
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -703,4 +795,117 @@ label.ctrl.fail input {
   color: #0b0d10;
   background: var(--teal);
   border-color: transparent;
+}
+
+.notes-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 340px) 1fr;
+  gap: 1rem;
+  align-items: start;
+  max-width: 1200px;
+}
+
+@media (max-width: 900px) {
+  .notes-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.notes-sidebar {
+  max-height: calc(100vh - 140px);
+  overflow: auto;
+  padding-right: 0.25rem;
+}
+
+.notes-sidebar .chapter-title {
+  font-size: 1.15rem;
+  margin-top: 0.8rem;
+}
+
+button.note-pick {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  background: var(--paper);
+  color: inherit;
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  font: inherit;
+}
+
+button.note-pick:hover {
+  border-color: rgba(212, 165, 116, 0.45);
+}
+
+button.note-pick.active {
+  border-color: rgba(110, 224, 196, 0.55);
+  box-shadow: 0 0 0 1px rgba(110, 224, 196, 0.25);
+}
+
+.notes-reader {
+  min-height: 70vh;
+  position: sticky;
+  top: 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notes-reader-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.notes-reader-head .chapter-title {
+  font-size: 1.35rem;
+  margin: 0.15rem 0;
+}
+
+.pdf-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-height: 60vh;
+}
+
+.pdf-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.pdf-page-label {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--brass);
+  min-width: 7rem;
+}
+
+.pdf-scroll {
+  overflow: auto;
+  max-height: calc(100vh - 220px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0e1117;
+  padding: 0.75rem;
+}
+
+.pdf-canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.pdf-status {
+  color: var(--muted);
+  line-height: 1.5;
+  padding: 1.5rem 0.5rem;
 }

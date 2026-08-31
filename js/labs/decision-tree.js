@@ -68,6 +68,8 @@ export function mountDecisionTree(root) {
     kicker: "Chapter 1 · Classical ML",
     body: "Same shared playground as logistic and k-NN. Axis-aligned splits carve rectangles. Raise depth until train accuracy looks perfect — that is the overfitting failure mode.",
     formula: "split = argmin Gini(left)+Gini(right)\nleaf → majority class",
+    guideKey: "tree",
+    notesHref: "#/notes?doc=Decision%20Tree%2FBeautified_Decision_Tree_Algorithm.pdf",
     bannerHtml: pathBannerHtml("path-tree"),
     controlsHtml: `
       <label class="ctrl">Max depth <span id="dv" class="stat">2</span>
@@ -83,7 +85,6 @@ export function mountDecisionTree(root) {
         <button id="rebuild">Rebuild tree</button>
       </div>
       <p class="explain" id="status"></p>
-      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Decision%20Tree/Beautified_Decision_Tree_Algorithm.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
   bindPathBanner(root);

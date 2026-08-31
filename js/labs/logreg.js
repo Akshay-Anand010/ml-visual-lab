@@ -12,6 +12,8 @@ export function mountLogreg(root) {
     kicker: "Chapter 1 · Classical ML",
     body: "Same shared playground points as k-NN and the decision tree. A linear boundary is honest but limited — some points will stay misclassified.",
     formula: "p = σ(w₁x + w₂y + b)\nL = −Σ [y log p + (1−y) log(1−p)]",
+    guideKey: "logreg",
+    notesHref: "#/notes?doc=Logistic%20Regression%2Flogistic_regression_study_notes.pdf",
     bannerHtml: pathBannerHtml("path-logreg"),
     controlsHtml: `
       <label class="ctrl">Learning rate η <span id="lrv" class="stat">0.35</span>
@@ -30,7 +32,6 @@ export function mountLogreg(root) {
         <button class="ghost" id="reset">Reset weights</button>
       </div>
       <p class="explain" id="status"></p>
-      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/Logistic%20Regression/logistic_regression_study_notes.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
   bindPathBanner(root);

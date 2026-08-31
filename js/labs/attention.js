@@ -23,6 +23,7 @@ export function mountAttention(root) {
     kicker: "Who listens to whom",
     body: "Each token has a query, key, and value. The query of the selected word is dotted with every key. Softmax turns those scores into a distribution: how much this word should read from each other word. The output is a mix of the values.",
     formula: "α = softmax(QKᵀ / √d)\noutput = α V",
+    guideKey: "attention",
     controlsHtml: `
       <label class="ctrl">Query token
         <input id="qi" type="range" min="0" max="4" step="1" value="1" />

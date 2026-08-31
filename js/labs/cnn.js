@@ -78,6 +78,9 @@ export function mountCnn(root) {
     kicker: "Sliding kernel",
     body: "A CNN does not look at a whole image at once. A tiny filter (kernel) slides across pixels. At each stop it computes a weighted mix — that is one cell of the feature map. ReLU zeros negatives; max-pool keeps the strongest response in each 2×2 block.",
     formula: "s[i,j] = Σ Σ K[u,v] · X[i+u, j+v]\nA = ReLU(s)   then  2×2 max-pool",
+    guideKey: "cnn",
+    notesHref: "#/notes?doc=reading-materials%2FU3%2F2026-08-08_Recommender-Systems-Time-Series%2FLecture-Notes%2FL1_CNN_Architecture-Final_V1.8.pdf",
+    notesHref: "#/notes?doc=" + encodeURIComponent("reading-materials/U3/2026-08-08_Recommender-Systems-Time-Series/Lecture-Notes/L1_CNN_Architecture-Final_V1.8.pdf"),
     controlsHtml: `
       <label class="ctrl">Kernel
         <select id="kname">

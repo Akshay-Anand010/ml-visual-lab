@@ -1,4 +1,34 @@
-export function labShell(root, { title, kicker, body, formula, controlsHtml, legend, bannerHtml = "" }) {
+import { LAB_GUIDES } from "./guides.js";
+
+export function labShell(
+  root,
+  { title, kicker, body, formula, controlsHtml, legend, bannerHtml = "", guideKey = null, notesHref = null }
+) {
+  const guide = guideKey ? LAB_GUIDES[guideKey] : null;
+  const guideBlock = guide
+    ? `
+    <details class="lab-more">
+      <summary>Simple explanation &amp; best links</summary>
+      <p class="guide-simple">${guide.simple}</p>
+      <ul class="guide-bullets">${guide.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
+      <div class="guide-links">
+        ${guide.links
+          .map(
+            (l) =>
+              `<a class="btn-link ghost" href="${l.href}" target="_blank" rel="noopener noreferrer">${l.label}</a>`
+          )
+          .join("")}
+      </div>
+      ${
+        notesHref
+          ? `<p class="explain" style="margin-top:0.65rem"><a class="ext" href="${notesHref}">Related notes (in-site reader) →</a></p>`
+          : ""
+      }
+    </details>`
+    : notesHref
+      ? `<p class="explain"><a class="ext" href="${notesHref}">Related notes →</a></p>`
+      : "";
+
   root.innerHTML = `
     <article class="lab">
       <aside class="panel">
@@ -6,6 +36,7 @@ export function labShell(root, { title, kicker, body, formula, controlsHtml, leg
         <h1>${title}</h1>
         <p>${body}</p>
         ${bannerHtml}
+        ${guideBlock}
         <pre class="formula">${formula}</pre>
         <div class="controls">${controlsHtml}</div>
         ${legend ? `<div class="legend">${legend}</div>` : ""}
@@ -57,4 +88,19 @@ export function lerp(a, b, t) {
 
 export function clamp(x, a, b) {
   return Math.max(a, Math.min(b, x));
+}
+
+export function themeColors() {
+  const s = getComputedStyle(document.documentElement);
+  return {
+    ink: s.getPropertyValue("--ink").trim() || "#f0ece4",
+    muted: s.getPropertyValue("--muted").trim() || "#9a948a",
+    brass: s.getPropertyValue("--brass").trim() || "#d4a574",
+    teal: s.getPropertyValue("--teal").trim() || "#6ee0c4",
+    coral: s.getPropertyValue("--coral").trim() || "#ef7b6c",
+    violet: s.getPropertyValue("--violet").trim() || "#b9a6ff",
+    paper: s.getPropertyValue("--paper").trim() || "#1a1e27",
+    line: s.getPropertyValue("--line").trim() || "rgba(240,236,228,0.1)",
+    canvasSoft: s.getPropertyValue("--canvas-soft").trim() || "#2a303c",
+  };
 }

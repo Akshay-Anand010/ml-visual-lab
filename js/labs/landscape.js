@@ -8,6 +8,7 @@ export function mountLandscape(root) {
     kicker: "Chapter 0 · Optimization",
     body: "Think of training as a ball rolling on a surface. Learning rate is step size: too small crawls; too large overshoots. Try the bowl, then the saddle.",
     formula: "θ ← θ − η ∇L(θ)\nbowl: L = x² + 0.4 y²   ·   saddle: L = x² − y²",
+    guideKey: "landscape",
     bannerHtml: pathBannerHtml("path-landscape"),
     controlsHtml: `
       <label class="ctrl">Surface

@@ -7,6 +7,7 @@ export function mountNeural(root) {
     kicker: "Chapter 2 · Deep learning",
     body: "Each neuron takes a weighted sum of the previous layer, then a non-linearity. Try the dead-ReLU failure mode: negative pre-activations stay zero forever.",
     formula: "a = f(Wx + b)\nf ∈ {ReLU, sigmoid, tanh}",
+    guideKey: "neural",
     bannerHtml: pathBannerHtml("path-neural"),
     controlsHtml: `
       <label class="ctrl">Input x₁ <span id="x1v" class="stat">0.80</span>

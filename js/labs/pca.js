@@ -55,6 +55,8 @@ export function mountPca(root) {
     kicker: "Chapter 1 · Classical ML",
     body: "Principal Component Analysis finds directions of maximum variance. Drag stretch and angle of the cloud — the gold axis is PC1 (most variance), violet is PC2. Dimensionality reduction keeps PC1 and drops the rest.",
     formula: "C = cov(X)\nC v = λ v   (eigenvectors = PCs)",
+    guideKey: "pca",
+    notesHref: "#/notes?doc=PCA%2Fbeautified_pca_notes.pdf",
     controlsHtml: `
       <label class="ctrl">Cloud stretch <span id="stv" class="stat">2.2</span>
         <input id="stretch" type="range" min="0.6" max="3.2" step="0.05" value="2.2" />
@@ -69,7 +71,6 @@ export function mountPca(root) {
         <button id="resample">Resample cloud</button>
       </div>
       <p class="explain" id="status"></p>
-      <p class="explain"><a class="ext" href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/PCA/beautified_pca_notes.pdf" target="_blank" rel="noreferrer">Related notes →</a></p>
     `,
   });
 
