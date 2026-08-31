@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hackathon III — Voice shop team sheet</title>
+    <meta
+      name="description"
+      content="IIITH AIML Hackathon III team plan: spoken-digit CNN for a two-step e-commerce order."
+    />
+    <style>
+      :root {
+        --bg: #f6f4ef;
+        --ink: #1c1b18;
+        --muted: #5c5850;
+        --line: #d9d4c8;
+        --card: #fffdf8;
+        --warn: #7a4a12;
+        --warn-bg: #f8ead4;
+        --accent: #1f4d6a;
+        --ok: #1e5a3a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--bg);
+        font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      main {
+        max-width: 52rem;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 4rem;
+      }
+      .pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin: 0 0 0.75rem;
+      }
+      .pill {
+        border: 1px solid var(--line);
+        background: var(--card);
+        padding: 0.15rem 0.55rem;
+        font-size: 0.8rem;
+      }
+      .pill.on {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      h1 {
+        font-size: 1.75rem;
+        line-height: 1.2;
+        margin: 0 0 0.5rem;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin: 2rem 0 0.6rem;
+      }
+      p,
+      li {
+        color: var(--ink);
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .small {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      a {
+        color: var(--accent);
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+        margin: 1.25rem 0;
+      }
+      @media (min-width: 640px) {
+        .stats {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+      .stat {
+        background: var(--card);
+        border: 1px solid var(--line);
+        padding: 0.75rem 0.85rem;
+      }
+      .stat b {
+        display: block;
+        font-size: 1.35rem;
+      }
+      .stat span {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+      .callout {
+        background: var(--warn-bg);
+        color: var(--warn);
+        border: 1px solid #e4c89a;
+        padding: 0.85rem 1rem;
+        margin: 1rem 0;
+      }
+      .callout strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--ink);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--card);
+        font-size: 0.9rem;
+        margin: 0.5rem 0 1rem;
+      }
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 0.5rem 0.6rem;
+        border-bottom: 1px solid var(--line);
+      }
+      th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      tr:nth-child(even) td {
+        background: #faf8f2;
+      }
+      .pair {
+        display: grid;
+        gap: 0.6rem;
+        margin: 0.75rem 0 1rem;
+      }
+      @media (min-width: 640px) {
+        .pair {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        padding: 0.85rem 1rem;
+      }
+      .card h3 {
+        margin: 0 0 0.35rem;
+        font-size: 0.95rem;
+      }
+      ol.checks {
+        padding-left: 1.2rem;
+      }
+      ol.checks li {
+        margin: 0.35rem 0;
+      }
+      .share {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--bg);
+        border-bottom: 1px solid var(--line);
+        padding: 0.6rem 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.86em;
+        background: #eeeae2;
+        padding: 0.05em 0.3em;
+      }
+      footer {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+      }
+      nav.toc a {
+        margin-right: 0.75rem;
+        white-space: nowrap;
+      }
+      @media print {
+        .share {
+          display: none;
+        }
+        body {
+          background: #fff;
+        }
+        a {
+          color: inherit;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="share">
+      <span>Hackathon III team sheet · 5–6 Sep 2026</span>
+      <span
+        >Share this file, or the live page after publish:
+        <a href="https://akshay-anand010.github.io/ml-visual-lab/hackathon-iii.html"
+          >github.io link</a
+        ></span
+      >
+    </div>
+    <main>
+      <div class="pills">
+        <span class="pill on">Hackathon III</span>
+        <span class="pill">5–6 Sep</span>
+        <span class="pill">Team of 5</span>
+      </div>
+      <h1>Voice shop — team sheet</h1>
+      <p class="muted">
+        Official files:
+        <a href="https://drive.google.com/drive/folders/1aoH6FXL4wDmqc8jziwfXuxZnNUwM5fYA"
+          >Drive folder</a
+        >.
+        Labs to copy from:
+        <a href="https://github.com/Akshay-Anand010/AIML-IIITH-2026">AIML-IIITH-2026</a>.
+      </p>
+
+      <div class="stats">
+        <div class="stat">
+          <b>50</b><span>40 notebook + 10 talk</span>
+        </div>
+        <div class="stat">
+          <b>&gt;80%</b><span>Need this test score</span>
+        </div>
+        <div class="stat">
+          <b>4</b><span>Correct tries in a row</span>
+        </div>
+        <div class="stat">
+          <b>16:00</b><span>Talk on 6 Sep</span>
+        </div>
+      </div>
+
+      <nav class="toc muted" aria-label="On this page">
+        <a href="#explain">Story</a>
+        <a href="#digits">Digits</a>
+        <a href="#labs">Labs</a>
+        <a href="#roles">Roles</a>
+        <a href="#colab">Colab blanks</a>
+        <a href="#when">When</a>
+        <a href="#breaks">Breaks</a>
+      </nav>
+
+      <h2 id="explain">Explain this to anyone on the team</h2>
+      <p>
+        The website is a tiny shop with two questions. First it asks which product. Then it
+        asks which store. You do not type. You say a number word: zero, one, two, three, four,
+        or five. The computer only cares which of those six words you said. It is not listening
+        for “laptop” or “Amazon”.
+      </p>
+      <p>
+        A function named <code>get_features</code> already turns 1 second of sound into a list
+        of 900 numbers (MFCC — the same idea as lab U3W14_52). You must not change that
+        function. Your job is to train a small CNN that looks at those 900 numbers and outputs
+        a digit 0–5. Same idea as Fashion-MNIST guessing “shirt vs shoe”, except here the input
+        is a sound fingerprint, not a picture.
+      </p>
+      <p>
+        You train in Google Colab on clean studio recordings. Then you copy the same network
+        onto the lab server. Graders record four correct product picks in a row, then four
+        store picks. Later you add your own voices and train again so the mic in the room still
+        works.
+      </p>
+      <div class="callout">
+        <strong>One rule everyone must remember</strong>
+        Do not change <code>get_features</code> (8 kHz, 30 MFCC, 15 frames). If Colab and the
+        server use different settings, training looks great and the live mic fails.
+      </div>
+
+      <h2 id="digits">What each spoken word buys</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>You say</th>
+            <th>Digit</th>
+            <th>Product screen</th>
+            <th>Store screen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>zero</td>
+            <td>0</td>
+            <td>Smart Phones</td>
+            <td>Amazon</td>
+          </tr>
+          <tr>
+            <td>one</td>
+            <td>1</td>
+            <td>Laptops</td>
+            <td>Flipkart</td>
+          </tr>
+          <tr>
+            <td>two</td>
+            <td>2</td>
+            <td>Speakers</td>
+            <td>Paytmmall</td>
+          </tr>
+          <tr>
+            <td>three</td>
+            <td>3</td>
+            <td>Hard Disks</td>
+            <td>RelianceDigital</td>
+          </tr>
+          <tr>
+            <td>four</td>
+            <td>4</td>
+            <td>Power Banks</td>
+            <td>Croma</td>
+          </tr>
+          <tr>
+            <td>five</td>
+            <td>5</td>
+            <td>Headphones</td>
+            <td>Tata</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="labs">Write code like these labs (open before you type)</h2>
+      <p>
+        Prefer the C notebooks (you already filled TODOs). A/B are the same labs with less
+        code filled in. Local copies live under <code>AIML-IIITH-2026/colab-notebooks/U3/</code>.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>H3 TODO</th>
+            <th>Open this collab</th>
+            <th>Copy this habit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>What is MFCC?</td>
+            <td>
+              <a
+                href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/colab-notebooks/U3/2026-08-22_CNN-Insight-RNN-LSTM-Speech/W4-Lab-Assignment-Notebooks/U3W14_52_MFCC_C.ipynb"
+                >U3W14_52_MFCC_C</a
+              >
+              ·
+              <a
+                href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/colab-notebooks/U3/2026-08-01_DL-Frameworks-Time-Series-CNN-RNN/U3W14_52_MFCC_C_completed.ipynb"
+                >completed copy</a
+              >
+            </td>
+            <td>
+              Sound → Mel → MFCC numbers → classify. Saving a model (joblib there; here use
+              <code>torch.save</code>)
+            </td>
+          </tr>
+          <tr>
+            <td>Net + train loop + LogSoftmax</td>
+            <td>
+              <a
+                href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/colab-notebooks/U3/2026-08-22_CNN-Insight-RNN-LSTM-Speech/W4-Lab-Assignment-Notebooks/U3W14_53_MFCC_Pytorch_C.ipynb"
+                >U3W14_53_MFCC_Pytorch_C</a
+              >
+            </td>
+            <td>
+              <code>class Net(nn.Module)</code>, <code>F.log_softmax</code>, zero_grad → forward
+              → loss → backward → step, <code>torch.max</code> for accuracy. That lab used Linear
+              layers on MFCC; H3 uses Conv1d but the train loop is the same
+            </td>
+          </tr>
+          <tr>
+            <td>Stacking conv layers</td>
+            <td>
+              <a
+                href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/colab-notebooks/U3/2026-07-25_CNN-Back-Propagation/w1-lab-assignment-notebooks/U3W11-38-FashionMNIST-CNN__U3W11_38_FashionMNIST_CNN_C.ipynb"
+                >U3W11_38 Fashion-MNIST CNN C</a
+              >
+              ·
+              <a
+                href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/colab-notebooks/U3/2026-07-25_CNN-Back-Propagation/w1-lab-assignment-notebooks/U3W11-40-Single-Image-Convolution__U3W11_40_Single_Image_Convolution_C.ipynb"
+                >U3W11_40 convolution C</a
+              >
+            </td>
+            <td>
+              Conv → ReLU → pool, then another conv. Fashion-MNIST is Conv2d on images. H3 is
+              Conv1d on 900 MFCC channels — same recipe, different layer type. Starter already
+              has the first Conv1d
+            </td>
+          </tr>
+          <tr>
+            <td>DataLoader + zero_grad loop</td>
+            <td>
+              <a
+                href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/colab-notebooks/U3/2026-08-01_DL-Frameworks-Time-Series-CNN-RNN/mini-hackathon/U3_MH2_Plant_Images_Denoising_completed.ipynb"
+                >U3_MH2 plant denoising (completed)</a
+              >
+            </td>
+            <td>
+              TensorDataset / DataLoader, train vs test loader, fill TODOs under time. Same
+              Colab rhythm as H3
+            </td>
+          </tr>
+          <tr>
+            <td>Noisy real voices</td>
+            <td>
+              <a
+                href="https://github.com/Akshay-Anand010/AIML-IIITH-2026/blob/main/colab-notebooks/U3/2026-08-22_CNN-Insight-RNN-LSTM-Speech/W4-Lab-Assignment-Notebooks/U3W14_51_Speech_Emotion_Recognition_C.ipynb"
+                >U3W14_51 Speech emotion C</a
+              >
+            </td>
+            <td>
+              Studio audio is clean; live mics are not. Why Stage 2 needs every teammate to
+              record
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="small">
+        Do not copy the U3W14_50 RNN/LSTM notebook into this hackathon. The starter and the
+        server both expect a CNN (<code>Conv1d</code>).
+      </p>
+
+      <h2 id="roles">Who does what</h2>
+      <p>
+        Pick a role. Sit next to the person in the row below you. Only Role 3 logs into the
+        server.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Plain job</th>
+            <th>Notebook they keep open</th>
+            <th>Done when</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 · Data</td>
+            <td>Read every .wav, call get_features, keep the digit from the file name</td>
+            <td>H3 starter load_data cell + U3W14_52 (what MFCC means)</td>
+            <td>Features shape (N, 900, 1), labels only 0–5</td>
+          </tr>
+          <tr>
+            <td>2 · Model</td>
+            <td>Finish the CNN, train until test accuracy is above 80%, save the file</td>
+            <td>U3W14_53 (train loop) + U3W11_38 (more conv layers) + H3 Net stub</td>
+            <td>speech_model.t7 downloads; same Net pasted into Order_model.py</td>
+          </tr>
+          <tr>
+            <td>3 · Server</td>
+            <td>Upload three files, start the website, never train on the server</td>
+            <td>Order.py comments (load example is already written)</td>
+            <td>audio_recorder page opens</td>
+          </tr>
+          <tr>
+            <td>4 · Live test</td>
+            <td>Say digits into the site until four in a row work on both screens</td>
+            <td>U3W14_51 (noisy speech) + digit table above</td>
+            <td>Studio pass, then team-voice pass</td>
+          </tr>
+          <tr>
+            <td>5 · Talk + backup</td>
+            <td>10-minute slides; jump in if Data or Model is stuck</td>
+            <td>This sheet + H3 grading cells</td>
+            <td>Deck rehearsed; extra copy of .t7 on Drive</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pair">
+        <div class="card">
+          <h3>Everyone on lab day</h3>
+          <p>
+            Record zero through five, a few times each. Quiet first, then with room noise.
+            Press Add More. Say the number word, not “laptop”.
+          </p>
+        </div>
+        <div class="card">
+          <h3>If someone is missing</h3>
+          <p>
+            Role 5 helps Data or Model. Role 4 may take Server only if Role 3 is gone. Two
+            people must not SSH at the same time.
+          </p>
+        </div>
+      </div>
+
+      <h2 id="colab">How to fill each Colab blank</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Blank in starter</th>
+            <th>In simple words</th>
+            <th>Look like</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>load_data(folder)</code></td>
+            <td>
+              Loop wav files. Label = number before the first _. Skip names starting with
+              noise. Stack get_features output
+            </td>
+            <td><code>glob</code> + <code>split('_')[0]</code>. Example: 0_b2_35.wav → label 0</td>
+          </tr>
+          <tr>
+            <td><code>train_test_split</code></td>
+            <td>Keep ~80% to learn, 20% to test. Use stratify so every digit is in both</td>
+            <td>Same sklearn call as other labs</td>
+          </tr>
+          <tr>
+            <td>DataLoader</td>
+            <td>Serve small batches so training is not one giant tensor</td>
+            <td>MH2: TensorDataset then DataLoader (shuffle=True on train)</td>
+          </tr>
+          <tr>
+            <td>Net extra convs</td>
+            <td>
+              Keep the given 900→400 layer. Add at least two more Conv1d + BN + ReLU. Flatten.
+              Linear to 6. LogSoftmax
+            </td>
+            <td>
+              H3 cell already has conv1. Fashion-MNIST shows stacking; use Conv1d not Conv2d
+            </td>
+          </tr>
+          <tr>
+            <td>criterion / optimizer</td>
+            <td>LogSoftmax wants NLLLoss. Adam with a small learning rate (try 0.001)</td>
+            <td>U3W14_53: criterion + optimizer then the epoch loop</td>
+          </tr>
+          <tr>
+            <td>Train / test cells</td>
+            <td>
+              Each batch: zero_grad, forward, loss, backward, step. Count how often torch.max
+              matches the label
+            </td>
+            <td>
+              U3W14_53 epoch loop (they used unsqueeze(0) per sample; you can do that per batch
+              instead)
+            </td>
+          </tr>
+          <tr>
+            <td>Save</td>
+            <td>Save the weights dictionary, not a mystery pickle</td>
+            <td>
+              <code>torch.save({'net_dict': model.state_dict()}, 'speech_model.t7')</code> —
+              matches Order.py
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Server blanks (Roles 2 and 3 together)</h2>
+      <p>
+        Copy the finished <code>Net</code> class from Colab into <code>Order_model.py</code>. In
+        <code>Order.py</code>, the load example is already commented.
+        <code>classify_input</code> must add a batch dimension (<code>unsqueeze</code>), set
+        <code>model.eval()</code>, then take <code>argmax</code> to get one integer 0–5 — same
+        unsqueeze idea as U3W14_53.
+      </p>
+
+      <h2>Marks by role</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Chunk</th>
+            <th>Marks</th>
+            <th>Who</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>load_data</td>
+            <td>4</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>CNN</td>
+            <td>4</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Train</td>
+            <td>3</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Test &gt;80%</td>
+            <td>3</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Save .t7</td>
+            <td>2</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Studio deploy</td>
+            <td>6</td>
+            <td>3 + 4</td>
+          </tr>
+          <tr>
+            <td>Team recordings</td>
+            <td>6</td>
+            <td>All, 4 leads</td>
+          </tr>
+          <tr>
+            <td>Retrain</td>
+            <td>6</td>
+            <td>1 + 2</td>
+          </tr>
+          <tr>
+            <td>Team deploy</td>
+            <td>6</td>
+            <td>3 + 4</td>
+          </tr>
+          <tr>
+            <td>Talk</td>
+            <td>10</td>
+            <td>5, all on questions</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Checklist</h2>
+      <ol class="checks">
+        <li>Everyone: skim U3W14_52 (MFCC) + U3W14_53 (PyTorch) before coding</li>
+        <li>Run H3 starter setup so studio_data appears</li>
+        <li>Role 1: load_data as in the table above</li>
+        <li>Role 2: finish Net like Fashion-MNIST stacking, train like U3W14_53</li>
+        <li>Roles 2+3: same Net on server; classify_input unsqueeze + argmax</li>
+        <li>Role 3: FileZilla + venv + runserver. Role 4: 4-in-a-row</li>
+        <li>All record → merge with studio → retrain → upload again</li>
+        <li>Role 5: six slides in the talk table below</li>
+      </ol>
+
+      <h2 id="when">When</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>When</th>
+            <th>Who is busy</th>
+            <th>Stop when</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Now–4 Sep</td>
+            <td>1 and 2 in Colab</td>
+            <td>.t7 on Drive, test &gt;80%</td>
+          </tr>
+          <tr>
+            <td>5 Sep morning</td>
+            <td>3 and 4 on the server</td>
+            <td>4-in-a-row both screens</td>
+          </tr>
+          <tr>
+            <td>5 Sep afternoon</td>
+            <td>All five recording</td>
+            <td>Several wavs per digit each</td>
+          </tr>
+          <tr>
+            <td>5 Sep evening</td>
+            <td>1–2 retrain, 3–4 redeploy</td>
+            <td>Works with your voices</td>
+          </tr>
+          <tr>
+            <td>6 Sep</td>
+            <td>5 runs rehearsal; 3 holds SSH</td>
+            <td>Ready before 16:00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="breaks">If something breaks</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>You see</th>
+            <th>Try this</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Shape error in Conv1d</td>
+            <td>Need (batch, 900, 1). Server: unsqueeze the 900×1 feature</td>
+          </tr>
+          <tr>
+            <td>Always predicts 0</td>
+            <td><code>model.eval()</code>; load <code>ckpt['net_dict']</code> like the Order.py comment</td>
+          </tr>
+          <tr>
+            <td>Colab good, mic bad</td>
+            <td>Same get_features; add team wavs; say “two” not “laptop”</td>
+          </tr>
+          <tr>
+            <td>404 on the website</td>
+            <td><code>source venv/bin/activate</code> then <code>sh runserver.sh</code></td>
+          </tr>
+          <tr>
+            <td>confirm_input -99</td>
+            <td>Your prediction was not an integer 0–5</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Talk (10 minutes)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Min</th>
+            <th>Say in simple words</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0–1</td>
+            <td>Six spoken numbers drive a two-step shop</td>
+          </tr>
+          <tr>
+            <td>1–3</td>
+            <td>MFCC like U3W14_52; we did not change the given function</td>
+          </tr>
+          <tr>
+            <td>3–5</td>
+            <td>CNN like Fashion-MNIST / U3W14_53; studio test vs 80%</td>
+          </tr>
+          <tr>
+            <td>5–7</td>
+            <td>Our voices vs studio: what got better</td>
+          </tr>
+          <tr>
+            <td>7–9</td>
+            <td>Live: product, then store</td>
+          </tr>
+          <tr>
+            <td>9–10</td>
+            <td>Still hard: noise and different speakers</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <footer>
+        <p class="small">
+          XML sample user <code>b15h1g</code> is not your team — use the B27 group id. Starter
+          notebook + Order.py are in
+          <code>AIML-IIITH-2026/colab-notebooks/U3/2026-09-05_Hackathon-III/official/</code>
+        </p>
+        <p>
+          <a
+            href="https://learn-iiith.talentsprint.com/learning/course/course-v1:IIITH+Module_3+U3_AIML_C27/block-v1:IIITH+Module_3+U3_AIML_C27+type@sequential+block@1862bd6ff211465e873c5200d19a150e/block-v1:IIITH+Module_3+U3_AIML_C27+type@vertical+block@3bb7a384db954c8280452cac3e4ad65d"
+            >LMS unit (Voice Based E-Commerce Ordering System Details)</a
+          >
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
