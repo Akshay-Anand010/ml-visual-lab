@@ -100,7 +100,7 @@ export function mountKnn(root) {
       `query → class <span class="stat">${pred.label}</span> (k=${k}, shared playground)`;
   }
 
-  canvas.addEventListener("mousemove", (e) => {
+  canvas.addEventListener("pointermove", (e) => {
     const { w: W, h: H } = cssSize();
     const pad = 40;
     const rect = canvas.getBoundingClientRect();

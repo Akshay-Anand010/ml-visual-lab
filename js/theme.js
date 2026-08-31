@@ -16,3 +16,20 @@ export function initTheme() {
     };
   }
 }
+
+export function initNav() {
+  const bar = document.querySelector(".topbar");
+  const toggle = document.getElementById("navToggle");
+  const nav = document.getElementById("siteNav");
+  if (!bar || !toggle) return;
+
+  const setOpen = (open) => {
+    bar.classList.toggle("nav-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  };
+
+  toggle.addEventListener("click", () => setOpen(!bar.classList.contains("nav-open")));
+  nav?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+  window.addEventListener("hashchange", () => setOpen(false));
+}

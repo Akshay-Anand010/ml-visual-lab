@@ -126,7 +126,7 @@ export function mountLogreg(root) {
     });
   }
 
-  canvas.addEventListener("mousemove", (e) => {
+  canvas.addEventListener("pointermove", (e) => {
     const { w: W, h: H } = cssSize();
     const pad = 40;
     const rect = canvas.getBoundingClientRect();

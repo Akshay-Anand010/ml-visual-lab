@@ -141,7 +141,7 @@ export function mountDecisionTree(root) {
     });
   }
 
-  canvas.addEventListener("mousemove", (e) => {
+  canvas.addEventListener("pointermove", (e) => {
     const { w: W, h: H } = cssSize();
     const pad = 36;
     const rect = canvas.getBoundingClientRect();

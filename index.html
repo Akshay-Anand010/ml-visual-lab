@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>ML Visual Lab — see how models think</title>
     <meta
       name="description"
@@ -19,26 +19,33 @@
   <body>
     <div class="grain" aria-hidden="true"></div>
     <header class="topbar">
-      <a class="mark" href="#/">
-        <svg class="mark-logo" viewBox="0 0 32 32" aria-hidden="true">
-          <rect class="mark-plate" x="1.75" y="1.75" width="28.5" height="28.5" rx="8" />
-          <path class="mark-edges" d="M10 12h12M10 12l6 9M22 12l-6 9" />
-          <circle class="mark-node" cx="10" cy="12" r="2.35" />
-          <circle class="mark-node" cx="22" cy="12" r="2.35" />
-          <circle class="mark-node mark-node-accent" cx="16" cy="21" r="2.55" />
-        </svg>
-        <span class="mark-name">ML Visual Lab</span>
-      </a>
-      <nav class="top-nav" aria-label="Chapters">
-        <a href="#/">Home</a>
-        <a href="#/path">Path</a>
-        <a href="#/evolution">Evolution</a>
-        <a href="#/linreg">Classical</a>
-        <a href="#/neural">Deep</a>
-        <a href="#/tfidf">Language</a>
-        <a href="#/notes">Notes</a>
-      </nav>
-      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">Light mode</button>
+      <div class="topbar-main">
+        <a class="mark" href="#/">
+          <svg class="mark-logo" viewBox="0 0 32 32" aria-hidden="true">
+            <rect class="mark-plate" x="1.75" y="1.75" width="28.5" height="28.5" rx="8" />
+            <path class="mark-edges" d="M10 12h12M10 12l6 9M22 12l-6 9" />
+            <circle class="mark-node" cx="10" cy="12" r="2.35" />
+            <circle class="mark-node" cx="22" cy="12" r="2.35" />
+            <circle class="mark-node mark-node-accent" cx="16" cy="21" r="2.55" />
+          </svg>
+          <span class="mark-name">ML Visual Lab</span>
+        </a>
+        <nav class="top-nav" id="siteNav" aria-label="Chapters">
+          <a href="#/">Home</a>
+          <a href="#/path">Path</a>
+          <a href="#/evolution">Evolution</a>
+          <a href="#/linreg">Classical</a>
+          <a href="#/neural">Deep</a>
+          <a href="#/tfidf">Language</a>
+          <a href="#/notes">Notes</a>
+        </nav>
+        <div class="topbar-tools">
+          <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">Light mode</button>
+          <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="siteNav" aria-label="Open menu">
+            <span class="nav-toggle-bars" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
     </header>
     <main id="app"></main>
     <footer class="site-foot">

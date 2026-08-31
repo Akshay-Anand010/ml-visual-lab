@@ -70,8 +70,9 @@ export function setupCanvas(canvas) {
   const resize = () => {
     const rect = canvas.parentElement.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = Math.max(320, rect.width - 8);
-    const h = Math.max(420, rect.height - 8);
+    const narrow = window.innerWidth < 720;
+    const w = Math.max(narrow ? 220 : 320, Math.floor(rect.width - 8));
+    const h = Math.max(narrow ? 260 : 420, Math.floor(rect.height - 8));
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = `${w}px`;
