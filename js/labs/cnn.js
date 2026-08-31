@@ -1,4 +1,4 @@
-import { labShell, setupCanvas } from "../ui.js";
+import { labShell, setupCanvas, paintStage } from "../ui.js";
 
 const KERNELS = {
   edge: [
@@ -111,8 +111,8 @@ export function mountCnn(root) {
     return img.map((row, y) => row.map((_, x) => relu(convAt(img, kernel, y, x))));
   }
 
-  function drawGrid(originX, originY, cell, grid, highlight, title) {
-    ctx.fillStyle = "#9a948a";
+  function drawGrid(originX, originY, cell, grid, highlight, title, C) {
+    ctx.fillStyle = C.muted;
     ctx.font = "13px Source Sans 3, sans-serif";
     ctx.textAlign = "left";
     ctx.fillText(title, originX, originY - 10);
@@ -120,12 +120,14 @@ export function mountCnn(root) {
       for (let x = 0; x < grid[0].length; x++) {
         const v = grid[y][x];
         const val = v == null ? 0.05 : Math.min(1, Math.abs(v));
-        ctx.fillStyle = `rgb(${20 + val * 180},${30 + val * 200},${40 + val * 160})`;
+        ctx.fillStyle = C.light
+          ? `rgb(${230 - val * 140},${220 - val * 80},${200 - val * 40})`
+          : `rgb(${20 + val * 180},${30 + val * 200},${40 + val * 160})`;
         ctx.fillRect(originX + x * cell, originY + y * cell, cell - 1, cell - 1);
       }
     }
     if (highlight) {
-      ctx.strokeStyle = "#d4a574";
+      ctx.strokeStyle = C.brass;
       ctx.lineWidth = 2;
       ctx.strokeRect(
         originX + (highlight.x - 1) * cell,
@@ -138,28 +140,28 @@ export function mountCnn(root) {
 
   function draw() {
     const { w, h } = cssSize();
-    ctx.clearRect(0, 0, w, h);
+    const C = paintStage(ctx, w, h);
     const cell = Math.min(22, (h - 80) / 14);
-    drawGrid(24, 40, cell, img, { x: cx, y: cy }, "input");
+    drawGrid(24, 40, cell, img, { x: cx, y: cy }, "input", C);
     const shown = fmap.map((r, y) =>
       r.map((v, x) => {
         if (y < cy || (y === cy && x <= cx)) return v ?? 0;
         return null;
       })
     );
-    drawGrid(24 + cell * 14, 40, cell, shown, null, "feature map (ReLU)");
+    drawGrid(24 + cell * 14, 40, cell, shown, null, "feature map (ReLU)", C);
     const pooled = pool2(fullMap());
     const pcell = cell * 1.6;
-    drawGrid(24 + cell * 28, 40, pcell, pooled, null, "max-pool 2×2");
+    drawGrid(24 + cell * 28, 40, pcell, pooled, null, "max-pool 2×2", C);
 
-    ctx.fillStyle = "#9a948a";
+    ctx.fillStyle = C.muted;
     ctx.font = "12px IBM Plex Mono, monospace";
     ctx.fillText("kernel 3×3", 24, h - 78);
     kernel.forEach((row, y) => {
       row.forEach((v, x) => {
         ctx.fillStyle = v >= 0 ? "rgba(110,224,196,0.85)" : "rgba(239,123,108,0.85)";
         ctx.fillRect(24 + x * 36, h - 68 + y * 20, 34, 18);
-        ctx.fillStyle = "#0b0d10";
+        ctx.fillStyle = C.onFill;
         ctx.textAlign = "left";
         ctx.fillText(String(v.toFixed(1)), 28 + x * 36, h - 54 + y * 20);
       });

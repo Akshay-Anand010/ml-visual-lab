@@ -1,43 +1,55 @@
 :root,
 html[data-theme="dark"] {
-  --bg: #0b0d10;
-  --bg-2: #12151b;
-  --ink: #f0ece4;
-  --muted: #9a948a;
-  --line: rgba(240, 236, 228, 0.1);
-  --brass: #d4a574;
-  --teal: #6ee0c4;
-  --coral: #ef7b6c;
-  --violet: #b9a6ff;
-  --paper: #1a1e27;
-  --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
-  --canvas-soft: #2a303c;
-  --field: #10141c;
-  --topbar-bg: rgba(11, 13, 16, 0.78);
-  --hero-glow-a: rgba(212, 165, 116, 0.08);
-  --hero-glow-b: rgba(110, 224, 196, 0.06);
+  color-scheme: dark;
+  --bg: #10141c;
+  --bg-2: #161b24;
+  --ink: #f3eee6;
+  --muted: #a39c92;
+  --line: rgba(243, 238, 230, 0.12);
+  --brass: #e0b07a;
+  --teal: #7ee8cc;
+  --coral: #f08a7c;
+  --violet: #c4b4ff;
+  --paper: #1c222d;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+  --canvas-soft: #2c3340;
+  --field: #151a23;
+  --topbar-bg: rgba(16, 20, 28, 0.86);
+  --hero-glow-a: rgba(224, 176, 122, 0.14);
+  --hero-glow-b: rgba(126, 232, 204, 0.08);
+  --grid: rgba(243, 238, 230, 0.14);
+  --on-fill: #14110c;
+  --on-brass: #1a1208;
+  --panel-shine: rgba(255, 255, 255, 0.06);
+  --pdf-well: #12161e;
   --sans: "Source Sans 3", system-ui, sans-serif;
   --serif: "Fraunces", Georgia, serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
 html[data-theme="light"] {
-  --bg: #f4efe6;
-  --bg-2: #ebe4d8;
+  color-scheme: light;
+  --bg: #f3eee4;
+  --bg-2: #e8e0d2;
   --ink: #1c1915;
-  --muted: #6b6358;
-  --line: rgba(28, 25, 21, 0.12);
-  --brass: #9a6b2f;
-  --teal: #0f7a66;
+  --muted: #5f584e;
+  --line: rgba(28, 25, 21, 0.14);
+  --brass: #8b5e28;
+  --teal: #0c6b5a;
   --coral: #c44b3c;
-  --violet: #5b4db0;
-  --paper: #fffaf2;
-  --shadow: 0 18px 50px rgba(70, 50, 20, 0.12);
-  --canvas-soft: #e7dfd2;
-  --field: #f0e9dc;
-  --topbar-bg: rgba(244, 239, 230, 0.88);
-  --hero-glow-a: rgba(154, 107, 47, 0.1);
-  --hero-glow-b: rgba(15, 122, 102, 0.08);
+  --violet: #5346a8;
+  --paper: #fffdf8;
+  --shadow: 0 16px 40px rgba(70, 50, 20, 0.1);
+  --canvas-soft: #e4dccf;
+  --field: #efe8db;
+  --topbar-bg: rgba(243, 238, 228, 0.92);
+  --hero-glow-a: rgba(139, 94, 40, 0.1);
+  --hero-glow-b: rgba(12, 107, 90, 0.08);
+  --grid: rgba(28, 25, 21, 0.12);
+  --on-fill: #fffdf8;
+  --on-brass: #fffdf8;
+  --panel-shine: rgba(255, 255, 255, 0.7);
+  --pdf-well: #e6dfd2;
 }
 
 * {
@@ -110,12 +122,37 @@ html[data-theme="light"] .grain {
   letter-spacing: -0.02em;
 }
 
-.mark-orb {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff, var(--teal) 40%, var(--brass));
-  box-shadow: 0 0 18px var(--teal);
+.mark-logo {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  display: block;
+}
+
+.mark-plate {
+  fill: var(--field);
+  stroke: var(--brass);
+  stroke-width: 1.6;
+}
+
+.mark-edges {
+  fill: none;
+  stroke: var(--brass);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mark-node {
+  fill: var(--ink);
+}
+
+.mark-node-accent {
+  fill: var(--teal);
+}
+
+.mark-name {
+  letter-spacing: -0.03em;
 }
 
 .top-nav {
@@ -236,6 +273,7 @@ html[data-theme="light"] .grain {
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 1.15rem 1.2rem;
+  box-shadow: inset 0 1px 0 var(--panel-shine);
 }
 
 .panel h1 {
@@ -357,7 +395,7 @@ select {
 
 button {
   background: var(--brass);
-  color: #1a1208;
+  color: var(--on-brass);
   border: 0;
   border-radius: 999px;
   padding: 0.5rem 0.95rem;
@@ -387,6 +425,7 @@ canvas {
   height: 100%;
   display: block;
   border-radius: 12px;
+  background: var(--paper);
 }
 
 .legend {
@@ -448,7 +487,7 @@ th {
 }
 
 .heat {
-  color: #0b0d10;
+  color: var(--ink);
   font-family: var(--mono);
   font-size: 0.72rem;
 }
@@ -457,7 +496,7 @@ th {
   display: inline-block;
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
-  background: #10141c;
+  background: var(--field);
   border: 1px solid var(--line);
   margin: 0.15rem;
   font-family: var(--mono);
@@ -490,12 +529,12 @@ a.ext {
   color: var(--ink);
   text-decoration: none;
   font-size: 0.9rem;
-  background: #10141c;
+  background: var(--field);
 }
 
 .btn-link.solid {
   background: var(--brass);
-  color: #1a1208;
+  color: var(--on-brass);
   border-color: transparent;
   font-weight: 600;
 }
@@ -564,7 +603,7 @@ a.ext {
 
 .evo-node {
   flex: 1 1 110px;
-  background: #10141c;
+  background: var(--field);
   border-radius: 12px;
   padding: 0.75rem 0.8rem;
   border: 1px solid var(--line);
@@ -604,8 +643,30 @@ a.ext {
   display: block;
 }
 
-.evo-hit:hover circle:first-child {
-  stroke: #6ee0c4;
+.evo-hit:hover .evo-core {
+  stroke: var(--teal);
+}
+
+.evo-core {
+  fill: var(--paper);
+  stroke: var(--brass);
+}
+
+.evo-dot {
+  fill: var(--teal);
+}
+
+.evo-label {
+  fill: var(--ink);
+}
+
+.evo-sub {
+  fill: var(--muted);
+}
+
+.evo-link {
+  fill: none;
+  stroke: var(--grid);
 }
 
 .notes-list {
@@ -663,7 +724,7 @@ a.ext {
   max-width: 280px;
   height: 8px;
   border-radius: 999px;
-  background: #10141c;
+  background: var(--field);
   border: 1px solid var(--line);
   overflow: hidden;
 }
@@ -732,8 +793,8 @@ a.ext {
   margin: 0.8rem 0;
   padding: 0.7rem 0.8rem;
   border-radius: 12px;
-  border: 1px solid rgba(212, 165, 116, 0.35);
-  background: #12161f;
+  border: 1px solid color-mix(in srgb, var(--brass) 45%, transparent);
+  background: var(--field);
 }
 
 .path-banner.done {
@@ -750,7 +811,7 @@ a.ext {
   margin-top: 0.85rem;
   padding: 0.55rem 0.7rem;
   border-radius: 10px;
-  background: #10141c;
+  background: var(--field);
   border: 1px solid var(--line);
   font-family: var(--mono);
   font-size: 0.75rem;
@@ -786,13 +847,13 @@ label.ctrl.fail input {
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: #10141c;
+  background: var(--field);
   color: var(--muted);
   cursor: pointer;
 }
 
 .chip-btn.on {
-  color: #0b0d10;
+  color: var(--on-fill);
   background: var(--teal);
   border-color: transparent;
 }
@@ -891,7 +952,7 @@ button.note-pick.active {
   max-height: calc(100vh - 220px);
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: #0e1117;
+  background: var(--pdf-well);
   padding: 0.75rem;
 }
 

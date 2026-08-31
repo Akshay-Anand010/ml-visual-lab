@@ -1,4 +1,4 @@
-import { labShell, setupCanvas, lerp, setInspect } from "../ui.js";
+import { labShell, setupCanvas, lerp, setInspect, paintStage } from "../ui.js";
 import { pathBannerHtml, bindPathBanner } from "../path.js";
 
 export function mountNeural(root) {
@@ -119,7 +119,7 @@ export function mountNeural(root) {
 
   function draw() {
     const { w, h } = cssSize();
-    ctx.clearRect(0, 0, w, h);
+    const C = paintStage(ctx, w, h);
     const pts = positions();
     W.forEach((mat, l) => {
       mat.forEach((row, j) => {
@@ -141,7 +141,7 @@ export function mountNeural(root) {
       if (p.t < 0 || p.t > 1) return;
       const x = lerp(p.a.x, p.b.x, p.t);
       const y = lerp(p.a.y, p.b.y, p.t);
-      ctx.fillStyle = p.w >= 0 ? "#6ee0c4" : "#ef7b6c";
+      ctx.fillStyle = p.w >= 0 ? C.teal : C.coral;
       ctx.beginPath();
       ctx.arc(x, y, 3.2, 0, Math.PI * 2);
       ctx.fill();
@@ -154,10 +154,10 @@ export function mountNeural(root) {
       ctx.fillStyle = `rgba(110,224,196,${0.15 + 0.7 * Math.min(1, show)})`;
       ctx.arc(p.x, p.y, 11 + Math.min(1, show) * 6, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "#f0ece4";
+      ctx.strokeStyle = C.ink;
       ctx.lineWidth = 1.4;
       ctx.stroke();
-      ctx.fillStyle = "#f0ece4";
+      ctx.fillStyle = C.ink;
       ctx.font = "11px IBM Plex Mono, monospace";
       ctx.textAlign = "center";
       ctx.fillText(a.toFixed(2), p.x, p.y + 26);

@@ -1,4 +1,4 @@
-import { labShell, setupCanvas, lerp, themeColors } from "../ui.js";
+import { labShell, setupCanvas, lerp, paintStage } from "../ui.js";
 const VOCAB = {
   The: [1, 0, 0, 0, 0],
   cat: [0, 1, 0, 0, 0],
@@ -119,9 +119,8 @@ export function mountRnn(root) {
   }
 
   function draw() {
-    const C = themeColors();
     const { w, h: H } = cssSize();
-    ctx.clearRect(0, 0, w, H);
+    const C = paintStage(ctx, w, H);
     const n = SEQ.length;
     const gap = (w - 70) / n;
     const focus = manual ? Number(root.querySelector("#tstep").value) : Math.min(tIndex, n - 1);
@@ -142,7 +141,7 @@ export function mountRnn(root) {
       ctx.fillStyle = i === tIndex ? C.teal : C.canvasSoft;
       round(ctx, x - 30, wordY - 16, 60, 32, 8);
       ctx.fill();
-      ctx.fillStyle = i === tIndex ? "#0b0d10" : C.ink;
+      ctx.fillStyle = i === tIndex ? C.onFill : C.ink;
       ctx.font = "12px Source Sans 3, sans-serif";
       ctx.textAlign = "center";
       ctx.fillText(word, x, wordY + 5);

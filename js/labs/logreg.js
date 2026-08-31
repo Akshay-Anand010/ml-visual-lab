@@ -1,4 +1,4 @@
-import { labShell, setupCanvas, setInspect } from "../ui.js";
+import { labShell, setupCanvas, setInspect, paintStage } from "../ui.js";
 import { playgroundClassify } from "../data/playground.js";
 import { pathBannerHtml, bindPathBanner } from "../path.js";
 
@@ -85,7 +85,7 @@ export function mountLogreg(root) {
 
   function draw() {
     const { w: W, h: H } = cssSize();
-    ctx.clearRect(0, 0, W, H);
+    const C = paintStage(ctx, W, H);
     const pad = 40;
     const toX = (x) => pad + ((x + 1.2) / 2.4) * (W - pad * 2);
     const toY = (y) => H - pad - ((y + 1.2) / 2.4) * (H - pad * 2);
@@ -103,7 +103,7 @@ export function mountLogreg(root) {
       }
     }
 
-    ctx.strokeStyle = "#d4a574";
+    ctx.strokeStyle = C.brass;
     ctx.lineWidth = 2;
     ctx.beginPath();
     if (Math.abs(w2) > 1e-4) {
@@ -114,12 +114,12 @@ export function mountLogreg(root) {
 
     pts.forEach((p, idx) => {
       const wrong = (predict(p) > 0.5 ? 1 : 0) !== p.label;
-      ctx.fillStyle = p.label ? "#6ee0c4" : "#ef7b6c";
+      ctx.fillStyle = p.label ? C.teal : C.coral;
       ctx.beginPath();
       ctx.arc(toX(p.x), toY(p.y), hover === idx ? 7 : 5, 0, Math.PI * 2);
       ctx.fill();
       if (wrong) {
-        ctx.strokeStyle = "#f0ece4";
+        ctx.strokeStyle = C.ink;
         ctx.lineWidth = 1.5;
         ctx.stroke();
       }

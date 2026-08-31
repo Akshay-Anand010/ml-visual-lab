@@ -61,4 +61,5 @@ function route() {
 }
 
 window.addEventListener("hashchange", route);
+window.addEventListener("mlvl-theme", route);
 route();

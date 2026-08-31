@@ -1,4 +1,4 @@
-import { labShell, setupCanvas, setInspect } from "../ui.js";
+import { labShell, setupCanvas, setInspect, paintStage } from "../ui.js";
 import { playgroundRegression } from "../data/playground.js";
 import { pathBannerHtml, bindPathBanner } from "../path.js";
 
@@ -95,7 +95,7 @@ export function mountLinreg(root) {
   function draw() {
     const v = viewed();
     const { w: W, h: H } = cssSize();
-    ctx.clearRect(0, 0, W, H);
+    const C = paintStage(ctx, W, H);
     const ox = 50;
     const oy = H - 50;
     const sx = (W - 100) / 2;
@@ -103,7 +103,7 @@ export function mountLinreg(root) {
     const toX = (x) => ox + (x + 1) * sx;
     const toY = (y) => oy - (y + 1) * sy;
 
-    ctx.strokeStyle = "rgba(240,236,228,0.12)";
+    ctx.strokeStyle = C.grid;
     ctx.beginPath();
     ctx.moveTo(ox, oy);
     ctx.lineTo(W - 40, oy);
@@ -112,20 +112,20 @@ export function mountLinreg(root) {
     ctx.stroke();
 
     pts.forEach((p) => {
-      ctx.fillStyle = "#6ee0c4";
+      ctx.fillStyle = C.teal;
       ctx.beginPath();
       ctx.arc(toX(p.x), toY(p.y), 4, 0, Math.PI * 2);
       ctx.fill();
     });
 
-    ctx.strokeStyle = "#d4a574";
+    ctx.strokeStyle = C.brass;
     ctx.lineWidth = 2.5;
     ctx.beginPath();
     ctx.moveTo(toX(-1), toY(v.w * -1 + v.b));
     ctx.lineTo(toX(1), toY(v.w * 1 + v.b));
     ctx.stroke();
 
-    ctx.strokeStyle = "#b9a6ff";
+    ctx.strokeStyle = C.violet;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     hist.forEach((h, i) => {
@@ -137,12 +137,12 @@ export function mountLinreg(root) {
     ctx.stroke();
     if (viewIdx >= 0 && hist[viewIdx]) {
       const x = W - 150 + (viewIdx / Math.max(1, hist.length - 1)) * 120;
-      ctx.fillStyle = "#f0ece4";
+      ctx.fillStyle = C.ink;
       ctx.beginPath();
       ctx.arc(x, 30 + 70 - Math.min(1, hist[viewIdx].loss) * 70, 4, 0, Math.PI * 2);
       ctx.fill();
     }
-    ctx.fillStyle = "#9a948a";
+    ctx.fillStyle = C.muted;
     ctx.font = "12px Source Sans 3, sans-serif";
     ctx.fillText("loss", W - 150, 24);
   }

@@ -1,4 +1,4 @@
-import { labShell, setupCanvas, setInspect } from "../ui.js";
+import { labShell, setupCanvas, setInspect, paintStage } from "../ui.js";
 import { playgroundClassify } from "../data/playground.js";
 import { pathBannerHtml, bindPathBanner } from "../path.js";
 
@@ -48,7 +48,7 @@ export function mountKnn(root) {
 
   function draw() {
     const { w: W, h: H } = cssSize();
-    ctx.clearRect(0, 0, W, H);
+    const C = paintStage(ctx, W, H);
     const pad = 40;
     const toX = (x) => pad + ((x + 1.2) / 2.4) * (W - pad * 2);
     const toY = (y) => H - pad - ((y + 1.2) / 2.4) * (H - pad * 2);
@@ -67,7 +67,7 @@ export function mountKnn(root) {
     const pred = predict(pts, query, k);
     neigh = pred.neighbors;
     neigh.forEach((n) => {
-      ctx.strokeStyle = "#d4a574";
+      ctx.strokeStyle = C.brass;
       ctx.lineWidth = 1.2;
       ctx.beginPath();
       ctx.moveTo(toX(query.x), toY(query.y));
@@ -77,22 +77,22 @@ export function mountKnn(root) {
 
     pts.forEach((p, i) => {
       const hit = neigh.some((n) => n.i === i);
-      ctx.fillStyle = p.label ? "#6ee0c4" : "#ef7b6c";
+      ctx.fillStyle = p.label ? C.teal : C.coral;
       ctx.beginPath();
       ctx.arc(toX(p.x), toY(p.y), hit ? 7 : 4.5, 0, Math.PI * 2);
       ctx.fill();
       if (hit) {
-        ctx.strokeStyle = "#d4a574";
+        ctx.strokeStyle = C.brass;
         ctx.lineWidth = 2;
         ctx.stroke();
       }
     });
 
-    ctx.fillStyle = "#f0ece4";
+    ctx.fillStyle = C.ink;
     ctx.beginPath();
     ctx.arc(toX(query.x), toY(query.y), 6, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = pred.label ? "#6ee0c4" : "#ef7b6c";
+    ctx.strokeStyle = pred.label ? C.teal : C.coral;
     ctx.lineWidth = 3;
     ctx.stroke();
 

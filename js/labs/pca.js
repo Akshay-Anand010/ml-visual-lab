@@ -1,4 +1,4 @@
-import { labShell, setupCanvas } from "../ui.js";
+import { labShell, setupCanvas, paintStage } from "../ui.js";
 
 function makeCloud(n, stretch, angle) {
   const c = Math.cos(angle);
@@ -87,7 +87,7 @@ export function mountPca(root) {
 
   function draw() {
     const { w: W, h: H } = cssSize();
-    ctx.clearRect(0, 0, W, H);
+    const C = paintStage(ctx, W, H);
     const P = pca(pts);
     root.querySelector("#status").innerHTML =
       `PC1 explains <span class="stat">${(P.r1 * 100).toFixed(1)}%</span> · PC2 <span class="stat">${(P.r2 * 100).toFixed(1)}%</span>`;
@@ -95,7 +95,7 @@ export function mountPca(root) {
     const toX = (x) => W / 2 + x * (W * 0.18);
     const toY = (y) => H / 2 - y * (H * 0.18);
 
-    ctx.strokeStyle = "rgba(240,236,228,0.1)";
+    ctx.strokeStyle = C.grid;
     ctx.beginPath();
     ctx.moveTo(40, H / 2);
     ctx.lineTo(W - 40, H / 2);
@@ -121,8 +121,8 @@ export function mountPca(root) {
       ctx.font = "13px Source Sans 3, sans-serif";
       ctx.fillText(label, toX(P.mx + vx * len) + 6, toY(P.my + vy * len));
     };
-    drawAxis(P.v1x, P.v1y, 1.8 + P.r1, "#d4a574", "PC1");
-    drawAxis(P.v2x, P.v2y, 0.9 + P.r2, "#b9a6ff", "PC2");
+    drawAxis(P.v1x, P.v1y, 1.8 + P.r1, C.brass, "PC1");
+    drawAxis(P.v2x, P.v2y, 0.9 + P.r2, C.violet, "PC2");
   }
 
   root.querySelector("#stretch").oninput = (e) => {

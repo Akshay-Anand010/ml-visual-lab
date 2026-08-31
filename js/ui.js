@@ -92,15 +92,27 @@ export function clamp(x, a, b) {
 
 export function themeColors() {
   const s = getComputedStyle(document.documentElement);
+  const g = (n, d) => s.getPropertyValue(n).trim() || d;
   return {
-    ink: s.getPropertyValue("--ink").trim() || "#f0ece4",
-    muted: s.getPropertyValue("--muted").trim() || "#9a948a",
-    brass: s.getPropertyValue("--brass").trim() || "#d4a574",
-    teal: s.getPropertyValue("--teal").trim() || "#6ee0c4",
-    coral: s.getPropertyValue("--coral").trim() || "#ef7b6c",
-    violet: s.getPropertyValue("--violet").trim() || "#b9a6ff",
-    paper: s.getPropertyValue("--paper").trim() || "#1a1e27",
-    line: s.getPropertyValue("--line").trim() || "rgba(240,236,228,0.1)",
-    canvasSoft: s.getPropertyValue("--canvas-soft").trim() || "#2a303c",
+    light: document.documentElement.getAttribute("data-theme") === "light",
+    ink: g("--ink", "#f0ece4"),
+    muted: g("--muted", "#9a948a"),
+    brass: g("--brass", "#d4a574"),
+    teal: g("--teal", "#6ee0c4"),
+    coral: g("--coral", "#ef7b6c"),
+    violet: g("--violet", "#b9a6ff"),
+    paper: g("--paper", "#1a1e27"),
+    field: g("--field", "#10141c"),
+    line: g("--line", "rgba(240,236,228,0.1)"),
+    grid: g("--grid", "rgba(240,236,228,0.12)"),
+    canvasSoft: g("--canvas-soft", "#2a303c"),
+    onFill: g("--on-fill", "#14110c"),
   };
+}
+
+export function paintStage(ctx, w, h) {
+  const C = themeColors();
+  ctx.fillStyle = C.paper;
+  ctx.fillRect(0, 0, w, h);
+  return C;
 }

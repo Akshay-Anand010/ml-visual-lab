@@ -1,4 +1,4 @@
-import { labShell, setupCanvas, setInspect } from "../ui.js";
+import { labShell, setupCanvas, setInspect, paintStage } from "../ui.js";
 import { pathBannerHtml, bindPathBanner } from "../path.js";
 
 /** Simple 2D loss bowl + saddle for GD intuition. */
@@ -63,7 +63,7 @@ export function mountLandscape(root) {
 
   function draw() {
     const { w: W, h: H } = cssSize();
-    ctx.clearRect(0, 0, W, H);
+    const C = paintStage(ctx, W, H);
     const pad = 36;
     const toX = (xx) => pad + ((xx + 2) / 4) * (W - pad * 2);
     const toY = (yy) => H - pad - ((yy + 2) / 4) * (H - pad * 2);
@@ -84,14 +84,14 @@ export function mountLandscape(root) {
     }
     grid.forEach(({ xx, yy, v }) => {
       const t = (v - minL) / (maxL - minL + 1e-6);
-      const r = 20 + t * 40;
-      const g = 30 + (1 - t) * 140;
-      const b = 50 + t * 80;
-      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      ctx.fillStyle = C.light
+        ? `rgb(${245 - t * 70},${232 - t * 90},${210 - t * 40})`
+        : `rgb(${20 + t * 40},${30 + (1 - t) * 140},${50 + t * 80})`;
       ctx.fillRect(xx, yy, step, step);
     });
 
-    ctx.strokeStyle = "rgba(240,236,228,0.55)";
+    ctx.strokeStyle = C.ink;
+    ctx.globalAlpha = 0.55;
     ctx.lineWidth = 2;
     ctx.beginPath();
     trail.forEach((p, i) => {
@@ -101,12 +101,13 @@ export function mountLandscape(root) {
       else ctx.lineTo(X, Y);
     });
     ctx.stroke();
+    ctx.globalAlpha = 1;
 
-    ctx.fillStyle = "#f0ece4";
+    ctx.fillStyle = C.ink;
     ctx.beginPath();
     ctx.arc(toX(x), toY(y), 7, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = "#d4a574";
+    ctx.strokeStyle = C.brass;
     ctx.lineWidth = 2;
     ctx.stroke();
   }

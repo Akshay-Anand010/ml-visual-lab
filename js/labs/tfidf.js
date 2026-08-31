@@ -1,4 +1,4 @@
-import { labShell } from "../ui.js";
+import { labShell, themeColors } from "../ui.js";
 
 function tokenize(text) {
   return text
@@ -32,8 +32,14 @@ function compute(docs) {
   return { vocab, tokens, idf, tfidf };
 }
 
-function heat(v, max) {
+function heat(v, max, light) {
   const t = max ? v / max : 0;
+  if (light) {
+    const r = Math.round(255 - t * 40);
+    const g = Math.round(248 - t * 90);
+    const b = Math.round(230 - t * 160);
+    return `rgb(${r},${g},${b})`;
+  }
   const r = Math.round(20 + t * 210);
   const g = Math.round(40 + t * 160);
   const b = Math.round(50 + (1 - t) * 40);
@@ -81,7 +87,7 @@ export function mountTfidf(root) {
               const cells = tfidf
                 .map((row) => {
                   const v = row[t];
-                  return `<td class="heat" style="background:${heat(v, max)}">${v.toFixed(2)}</td>`;
+                  return `<td class="heat" style="background:${heat(v, max, themeColors().light)}">${v.toFixed(2)}</td>`;
                 })
                 .join("");
               return `<tr><td>${t}</td><td>${idf[t].toFixed(2)}</td>${cells}</tr>`;

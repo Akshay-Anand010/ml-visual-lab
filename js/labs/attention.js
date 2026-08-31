@@ -1,4 +1,4 @@
-import { labShell, setupCanvas } from "../ui.js";
+import { labShell, setupCanvas, paintStage } from "../ui.js";
 
 const TOKENS = ["The", "cat", "sat", "on", "mat"];
 
@@ -46,12 +46,12 @@ export function mountAttention(root) {
     const sc = scores(qi);
     const att = softmax(sc);
     const { w, h } = cssSize();
-    ctx.clearRect(0, 0, w, h);
+    const C = paintStage(ctx, w, h);
     const cell = Math.min(64, (w - 120) / 6);
     const ox = 90;
     const oy = 70;
 
-    ctx.fillStyle = "#9a948a";
+    ctx.fillStyle = C.muted;
     ctx.font = "12px Source Sans 3, sans-serif";
     ctx.textAlign = "center";
     TOKENS.forEach((t, j) => {
@@ -69,13 +69,13 @@ export function mountAttention(root) {
         const a = rowScores[j];
         ctx.fillStyle = `rgba(110,224,196,${0.12 + a * 0.88})`;
         ctx.fillRect(ox + j * cell, oy + i * cell, cell - 3, cell - 3);
-        ctx.fillStyle = "#0b0d10";
+        ctx.fillStyle = C.ink;
         ctx.font = "11px IBM Plex Mono, monospace";
         ctx.fillText(a.toFixed(2), ox + j * cell + cell / 2, oy + i * cell + cell / 2);
       });
     });
 
-    ctx.strokeStyle = "#d4a574";
+    ctx.strokeStyle = C.brass;
     ctx.lineWidth = 2;
     ctx.strokeRect(ox, oy + qi * cell, cell * 5 - 3, cell - 3);
 
@@ -88,7 +88,7 @@ export function mountAttention(root) {
 
     root.querySelector("#msg").innerHTML = `Query is “${TOKENS[qi]}”. Attention mix of values ≈ <span class="stat">[${mix.map((v) => v.toFixed(2)).join(", ")}]</span>`;
 
-    ctx.fillStyle = "#9a948a";
+    ctx.fillStyle = C.muted;
     ctx.textAlign = "left";
     ctx.font = "13px Source Sans 3, sans-serif";
     ctx.fillText("Rows = query token, columns = key token. Gold box is the selected query.", ox, oy + cell * 5 + 28);

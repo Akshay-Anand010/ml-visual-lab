@@ -1,4 +1,4 @@
-import { labShell, setupCanvas, lerp, setInspect } from "../ui.js";
+import { labShell, setupCanvas, lerp, setInspect, paintStage } from "../ui.js";
 import { pathBannerHtml, bindPathBanner } from "../path.js";
 
 /** Tiny MLP trained on XOR with visible forward + backward passes. */
@@ -143,7 +143,7 @@ export function mountBackprop(root) {
 
   function draw() {
     const L = layout();
-    ctx.clearRect(0, 0, L.w, L.h);
+    const C = paintStage(ctx, L.w, L.h);
     const cache = last.cache || forward([0, 0]);
 
     const edges = [];
@@ -169,7 +169,7 @@ export function mountBackprop(root) {
         const u = Math.max(0, Math.min(1, local));
         const x = lerp(e.a.x, e.b.x, phase === "bwd" ? 1 - u : u);
         const y = lerp(e.a.y, e.b.y, phase === "bwd" ? 1 - u : u);
-        ctx.fillStyle = phase === "fwd" ? "#6ee0c4" : "#ef7b6c";
+        ctx.fillStyle = phase === "fwd" ? C.teal : C.coral;
         ctx.beginPath();
         ctx.arc(x, y, 3.4, 0, Math.PI * 2);
         ctx.fill();
@@ -186,9 +186,9 @@ export function mountBackprop(root) {
       ctx.fillStyle = `rgba(110,224,196,${0.12 + 0.75 * n.v})`;
       ctx.arc(n.x, n.y, 12, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "#f0ece4";
+      ctx.strokeStyle = C.ink;
       ctx.stroke();
-      ctx.fillStyle = "#f0ece4";
+      ctx.fillStyle = C.ink;
       ctx.font = "11px IBM Plex Mono, monospace";
       ctx.textAlign = "center";
       ctx.fillText(n.lab, n.x, n.y - 18);
@@ -197,11 +197,11 @@ export function mountBackprop(root) {
 
     const bx = L.w - 140;
     const by = 24;
-    ctx.fillStyle = "#9a948a";
+    ctx.fillStyle = C.muted;
     ctx.textAlign = "left";
     ctx.font = "12px Source Sans 3, sans-serif";
     ctx.fillText("loss", bx, by);
-    ctx.strokeStyle = "#d4a574";
+    ctx.strokeStyle = C.brass;
     ctx.beginPath();
     lossHist.forEach((v, i) => {
       const x = bx + (i / Math.max(1, lossHist.length - 1)) * 120;
@@ -213,7 +213,7 @@ export function mountBackprop(root) {
     if (scrubIdx >= 0 && lossHist[scrubIdx] != null) {
       const x = bx + (scrubIdx / Math.max(1, lossHist.length - 1)) * 120;
       const y = by + 70 - Math.min(1, lossHist[scrubIdx]) * 60;
-      ctx.fillStyle = "#f0ece4";
+      ctx.fillStyle = C.ink;
       ctx.beginPath();
       ctx.arc(x, y, 4, 0, Math.PI * 2);
       ctx.fill();

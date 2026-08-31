@@ -12,6 +12,7 @@ export function initTheme() {
       document.documentElement.setAttribute("data-theme", next);
       localStorage.setItem(KEY, next);
       btn.textContent = next === "light" ? "Dark mode" : "Light mode";
+      window.dispatchEvent(new CustomEvent("mlvl-theme", { detail: next }));
     };
   }
 }

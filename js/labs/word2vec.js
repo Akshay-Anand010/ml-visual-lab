@@ -1,4 +1,4 @@
-import { labShell, setupCanvas } from "../ui.js";
+import { labShell, setupCanvas, paintStage } from "../ui.js";
 
 const CORPUS = "the cat sat on the mat the dog sat on the log cat and dog";
 const WINDOW = 2;
@@ -85,8 +85,8 @@ export function mountWord2Vec(root) {
 
   function draw() {
     const { w, h } = cssSize();
-    ctx.clearRect(0, 0, w, h);
-    ctx.strokeStyle = "rgba(240,236,228,0.08)";
+    const C = paintStage(ctx, w, h);
+    ctx.strokeStyle = C.grid;
     ctx.beginPath();
     ctx.moveTo(40, h / 2);
     ctx.lineTo(w - 40, h / 2);
@@ -109,17 +109,17 @@ export function mountWord2Vec(root) {
     vocab.forEach((word) => {
       const p = project(vec[word], w, h);
       const hot = current && (word === current[0] || word === current[1]);
-      ctx.fillStyle = hot ? "#6ee0c4" : "#d4a574";
+      ctx.fillStyle = hot ? C.teal : C.brass;
       ctx.beginPath();
       ctx.arc(p.x, p.y, hot ? 7 : 5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = "#f0ece4";
+      ctx.fillStyle = C.ink;
       ctx.font = "13px Source Sans 3, sans-serif";
       ctx.textAlign = "left";
       ctx.fillText(word, p.x + 8, p.y - 6);
     });
 
-    ctx.fillStyle = "#9a948a";
+    ctx.fillStyle = C.muted;
     ctx.font = "12px IBM Plex Mono, monospace";
     ctx.fillText(`steps ${steps}`, 24, 24);
   }

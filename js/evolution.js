@@ -14,8 +14,8 @@ export function renderEvolution(root) {
         <svg viewBox="0 0 960 420" role="img" aria-label="Evolution of machine learning ideas">
           <defs>
             <linearGradient id="g" x1="0" x2="1">
-              <stop offset="0%" stop-color="#d4a574"/>
-              <stop offset="100%" stop-color="#6ee0c4"/>
+              <stop offset="0%" stop-color="var(--brass)"/>
+              <stop offset="100%" stop-color="var(--teal)"/>
             </linearGradient>
           </defs>
           <line x1="60" y1="210" x2="900" y2="210" stroke="url(#g)" stroke-width="3" />
@@ -26,14 +26,14 @@ export function renderEvolution(root) {
           ${node(640, 120, "CNNs", "#/cnn", "vision")}
           ${node(640, 300, "RNNs", "#/rnn", "sequences")}
           ${node(820, 210, "Attention &\ntransformers", "#/attention", "today")}
-          <path d="M140 210 C190 210 210 120 230 120" fill="none" stroke="rgba(240,236,228,0.25)" />
-          <path d="M140 210 C190 210 210 300 230 300" fill="none" stroke="rgba(240,236,228,0.25)" />
-          <path d="M290 120 C360 120 400 210 430 210" fill="none" stroke="rgba(240,236,228,0.25)" />
-          <path d="M290 300 C360 300 400 210 430 210" fill="none" stroke="rgba(240,236,228,0.25)" />
-          <path d="M520 210 C570 210 590 120 610 120" fill="none" stroke="rgba(240,236,228,0.25)" />
-          <path d="M520 210 C570 210 590 300 610 300" fill="none" stroke="rgba(240,236,228,0.25)" />
-          <path d="M670 120 C730 120 760 210 790 210" fill="none" stroke="rgba(240,236,228,0.25)" />
-          <path d="M670 300 C730 300 760 210 790 210" fill="none" stroke="rgba(240,236,228,0.25)" />
+          <path class="evo-link" d="M140 210 C190 210 210 120 230 120" />
+          <path class="evo-link" d="M140 210 C190 210 210 300 230 300" />
+          <path class="evo-link" d="M290 120 C360 120 400 210 430 210" />
+          <path class="evo-link" d="M290 300 C360 300 400 210 430 210" />
+          <path class="evo-link" d="M520 210 C570 210 590 120 610 120" />
+          <path class="evo-link" d="M520 210 C570 210 590 300 610 300" />
+          <path class="evo-link" d="M670 120 C730 120 760 210 790 210" />
+          <path class="evo-link" d="M670 300 C730 300 760 210 790 210" />
         </svg>
         <p class="explain">Click a node to open its lab. Ideas don’t replace each other — they stack. Linear models still win on small tabular data; attention didn’t erase CNNs for many vision tasks.</p>
       </div>
@@ -82,10 +82,10 @@ function node(x, y, label, href, sub) {
   const lines = label.split("\n");
   return `
     <g data-href="${href}" class="evo-hit">
-      <circle cx="${x}" cy="${y}" r="34" fill="#1a1e27" stroke="#d4a574" stroke-width="2"/>
-      <circle cx="${x}" cy="${y}" r="6" fill="#6ee0c4"/>
-      <text x="${x}" y="${y - 48}" text-anchor="middle" fill="#f0ece4" font-family="Fraunces, Georgia, serif" font-size="15">${lines[0]}</text>
-      ${lines[1] ? `<text x="${x}" y="${y - 32}" text-anchor="middle" fill="#f0ece4" font-family="Fraunces, Georgia, serif" font-size="15">${lines[1]}</text>` : ""}
-      <text x="${x}" y="${y + 52}" text-anchor="middle" fill="#9a948a" font-family="IBM Plex Mono, monospace" font-size="11">${sub}</text>
+      <circle class="evo-core" cx="${x}" cy="${y}" r="34" stroke-width="2"/>
+      <circle class="evo-dot" cx="${x}" cy="${y}" r="6"/>
+      <text class="evo-label" x="${x}" y="${y - 48}" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="15">${lines[0]}</text>
+      ${lines[1] ? `<text class="evo-label" x="${x}" y="${y - 32}" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="15">${lines[1]}</text>` : ""}
+      <text class="evo-sub" x="${x}" y="${y + 52}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11">${sub}</text>
     </g>`;
 }

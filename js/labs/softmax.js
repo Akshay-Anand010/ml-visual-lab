@@ -1,4 +1,4 @@
-import { labShell, setupCanvas, setInspect } from "../ui.js";
+import { labShell, setupCanvas, setInspect, paintStage } from "../ui.js";
 import { pathBannerHtml, bindPathBanner } from "../path.js";
 
 function softmax(logits) {
@@ -36,7 +36,6 @@ export function mountSoftmax(root) {
 
   const { ctx, resize, cssSize } = setupCanvas(canvas);
   const labels = ["A", "B", "C"];
-  const colors = ["#6ee0c4", "#d4a574", "#b9a6ff"];
 
   function values() {
     return [0, 1, 2].map((i) => Number(root.querySelector(`#z${i}`).value));
@@ -47,21 +46,21 @@ export function mountSoftmax(root) {
     const T = Number(root.querySelector("#temp").value);
     const p = softmax(z.map((v) => v / T));
     const { w: W, h: H } = cssSize();
-    ctx.clearRect(0, 0, W, H);
+    const C = paintStage(ctx, W, H);
 
     const barW = Math.min(120, (W - 80) / 3 - 20);
     p.forEach((pi, i) => {
       const x = 50 + i * ((W - 80) / 3);
       const bh = pi * (H - 140);
-      ctx.fillStyle = colors[i];
+      ctx.fillStyle = [C.teal, C.brass, C.violet][i];
       ctx.fillRect(x, H - 60 - bh, barW, bh);
-      ctx.fillStyle = "#f0ece4";
+      ctx.fillStyle = C.ink;
       ctx.font = "14px Source Sans 3, sans-serif";
       ctx.textAlign = "center";
       ctx.fillText(`class ${labels[i]}`, x + barW / 2, H - 36);
       ctx.font = "13px IBM Plex Mono, monospace";
       ctx.fillText(pi.toFixed(3), x + barW / 2, H - 70 - bh);
-      ctx.fillStyle = "#9a948a";
+      ctx.fillStyle = C.muted;
       ctx.fillText(`z=${z[i].toFixed(2)}`, x + barW / 2, H - 18);
     });
 
