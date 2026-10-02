@@ -2,3 +2,13 @@
 node_modules
 *.log
 .vscode
+__pycache__/
+.venv/
+venv/
+*.pt
+.ipynb_checkpoints/
+.venv
+__pycache__
+*.pyc
+server/weights/*.pt
+.ipynb_checkpoints

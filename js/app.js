@@ -9,6 +9,7 @@ initNav();
 import { mountNeural } from "./labs/neural.js";
 import { mountBackprop } from "./labs/backprop.js";
 import { mountCnn } from "./labs/cnn.js";
+import { mountCnnStudio } from "./labs/cnn-studio.js";
 import { mountRnn } from "./labs/rnn.js";
 import { mountTfidf } from "./labs/tfidf.js";
 import { mountWord2Vec } from "./labs/word2vec.js";
@@ -39,6 +40,7 @@ const routes = {
   neural: mountNeural,
   backprop: mountBackprop,
   cnn: mountCnn,
+  "cnn-studio": mountCnnStudio,
   rnn: mountRnn,
   tfidf: mountTfidf,
   word2vec: mountWord2Vec,

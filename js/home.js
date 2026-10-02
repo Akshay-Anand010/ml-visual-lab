@@ -20,7 +20,7 @@ export function renderHome(root) {
       </p>
       <div class="hero-actions">
         <a class="btn-link solid" href="#/path">Guided path (${done}/${total})</a>
-        <a class="btn-link" href="#/evolution">Evolution map</a>
+        <a class="btn-link" href="#/cnn-studio">CNN Studio</a>
         <a class="btn-link ghost" href="#/notes">Notes</a>
       </div>
     </section>
@@ -80,6 +80,7 @@ export function renderHome(root) {
         ${card("#/neural", "2.1", "Neural network", "Widths, activations, dead ReLUs.")}
         ${card("#/backprop", "2.2", "Backpropagation", "Step, scrub loss, inspect weights.")}
         ${card("#/cnn", "2.3", "CNN", "Sliding kernels, ReLU, max-pool.")}
+        ${card("#/cnn-studio", "2.5", "CNN Studio", "Upload a face · 50–128 FastAPI views.")}
         ${card("#/rnn", "2.4", "RNN", "Hidden state through a sentence.")}
       </div>
     </section>
